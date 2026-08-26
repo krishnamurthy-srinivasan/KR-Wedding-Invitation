@@ -603,18 +603,18 @@
 .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 
 /* --- 1. Aurora --- */
-.aurora { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.55; }
+.aurora { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.9; }
 .aurora--1 {
   width: 64vmax; height: 64vmax; top: -20vmax; left: -16vmax;
-  background: radial-gradient(circle, rgba(140, 86, 178, 0.34), transparent 66%);
+  background: radial-gradient(circle, rgba(150, 92, 196, 0.62), transparent 68%);
 }
 .aurora--2 {
   width: 56vmax; height: 56vmax; bottom: -22vmax; right: -14vmax;
-  background: radial-gradient(circle, rgba(198, 154, 74, 0.30), transparent 66%);
+  background: radial-gradient(circle, rgba(212, 166, 82, 0.52), transparent 68%);
 }
 .aurora--3 {
   width: 48vmax; height: 48vmax; top: 34%; left: 42%;
-  background: radial-gradient(circle, rgba(190, 110, 160, 0.20), transparent 66%);
+  background: radial-gradient(circle, rgba(204, 118, 172, 0.44), transparent 68%);
 }
 @media (prefers-reduced-motion: no-preference) {
   .aurora--1 { animation: aurora-a 34s var(--ease-soft) infinite alternate; }
@@ -627,15 +627,15 @@
 
 /* Light theme keeps the aurora subtractive so the ivory stays paper-like. */
 .aurora { mix-blend-mode: multiply; }
-[data-theme="dark"] .aurora { mix-blend-mode: screen; opacity: 0.42; filter: blur(90px); }
+[data-theme="dark"] .aurora { mix-blend-mode: screen; opacity: 0.62; filter: blur(80px); }
 
 /* --- 2. Rotating kolam geometry --- */
 .kolam {
   position: absolute; aspect-ratio: 1; color: var(--gold);
-  opacity: 0.07;
+  opacity: 0.17;
 }
 .kolam svg { width: 100%; height: 100%; }
-[data-theme="dark"] .kolam { opacity: 0.10; }
+[data-theme="dark"] .kolam { opacity: 0.22; }
 @media (prefers-reduced-motion: no-preference) {
   .kolam { animation: kolam-turn var(--dur, 180s) linear infinite; animation-direction: var(--dir, normal); }
 }
@@ -662,7 +662,7 @@
   position: absolute; bottom: -6vh;
   width: var(--size, 3px); height: var(--size, 3px); border-radius: 50%;
   background: radial-gradient(circle, #ffd98a, rgba(217,181,105,0.5) 55%, transparent 72%);
-  box-shadow: 0 0 10px 3px rgba(217, 181, 105, 0.35);
+  box-shadow: 0 0 14px 4px rgba(217, 181, 105, 0.55);
   opacity: 0;
   animation: ember-rise var(--dur, 18s) linear var(--delay, 0s) infinite;
 }

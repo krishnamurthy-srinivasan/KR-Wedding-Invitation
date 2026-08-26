@@ -93,7 +93,7 @@ const PETAL_SVG = `
 
 const KOLAM_SVG = `
 <svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="0.7" fill="none">
+  <g stroke="currentColor" stroke-width="1.1" fill="none">
     <circle cx="100" cy="100" r="94"/>
     <circle cx="100" cy="100" r="70"/>
     <circle cx="100" cy="100" r="44"/>
@@ -149,7 +149,7 @@ export function initAmbient() {
     s.style.setProperty("--size", `${1 + Math.random() * 2}px`);
     s.style.setProperty("--dur", `${3 + Math.random() * 6}s`);
     s.style.setProperty("--delay", `${-Math.random() * 8}s`);
-    s.style.setProperty("--peak", (0.3 + Math.random() * 0.6).toFixed(2));
+    s.style.setProperty("--peak", (0.5 + Math.random() * 0.5).toFixed(2));
   }
 
   /* 4. Diya embers */
@@ -161,7 +161,7 @@ export function initAmbient() {
     e.style.setProperty("--dur", `${12 + Math.random() * 14}s`);
     e.style.setProperty("--delay", `${-Math.random() * 26}s`);
     e.style.setProperty("--sway", `${(Math.random() - 0.5) * 140}px`);
-    e.style.setProperty("--peak", (0.4 + Math.random() * 0.45).toFixed(2));
+    e.style.setProperty("--peak", (0.55 + Math.random() * 0.45).toFixed(2));
   }
 
   /* 5. Jasmine petals */
@@ -174,7 +174,7 @@ export function initAmbient() {
     p.style.setProperty("--delay", `${-Math.random() * 30}s`);
     p.style.setProperty("--drift", `${(Math.random() - 0.5) * 240}px`);
     p.style.setProperty("--spin", `${140 + Math.random() * 320}deg`);
-    p.style.setProperty("--peak", (0.16 + Math.random() * 0.18).toFixed(2));
+    p.style.setProperty("--peak", (0.28 + Math.random() * 0.26).toFixed(2));
   }
 
   layer.appendChild(frag);

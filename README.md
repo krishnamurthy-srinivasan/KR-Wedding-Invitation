@@ -78,6 +78,21 @@ public/
 - `?open=1` skips the envelope and lands straight on the invitation.
   Useful for testing, or for sharing a direct link to a section.
 
+## After editing CSS or JS: re-stamp
+
+Every local stylesheet and script is referenced with a content hash
+(`main.css?v=f5b06295`) so a browser can never serve a stale mix of old and
+new files. Inner ES-module imports and the CSS `@import` are stamped too.
+
+**Run this after any change to `public/styles/` or `public/scripts/`:**
+
+```bash
+python3 build-cachebust.py
+```
+
+Forgetting it means returning visitors may keep the previous version until
+they hard-reload.
+
 ## Editing content
 
 All wording, dates, names, events and photos live in

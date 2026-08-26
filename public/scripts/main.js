@@ -1,14 +1,14 @@
-import { WEDDING } from "./wedding-data.js";
-import { ORN, mountCorners } from "./ornaments.js";
-import { initReveals, prepareDrawings, initParallax, initAmbient } from "./motion.js";
-import { initCountdown } from "./countdown.js";
-import { initLightbox } from "./lightbox.js";
-import { initNav, initOverture } from "./nav.js";
-import { initAudio } from "./audio.js";
-import { initScratch } from "./scratch.js";
-import { initGopuram } from "./gopuram.js";
-import { burst } from "./confetti.js";
-import { initTheme } from "./theme.js";
+import { WEDDING } from "./wedding-data.js?v=9d18bcc2";
+import { ORN, mountCorners } from "./ornaments.js?v=15738531";
+import { initReveals, prepareDrawings, initParallax, initAmbient } from "./motion.js?v=f977ae37";
+import { initCountdown } from "./countdown.js?v=1f1955cd";
+import { initLightbox } from "./lightbox.js?v=010ac977";
+import { initNav, initOverture } from "./nav.js?v=b9be22ac";
+import { initAudio } from "./audio.js?v=2951ae48";
+import { initScratch } from "./scratch.js?v=16bf68dd";
+import { initGopuram } from "./gopuram.js?v=3fce13d0";
+import { burst } from "./confetti.js?v=2b8b70a9";
+import { initTheme } from "./theme.js?v=5dc7a2b3";
 
 /* ---------- Fill in ornament placeholders ---------- */
 function mountOrnaments() {
