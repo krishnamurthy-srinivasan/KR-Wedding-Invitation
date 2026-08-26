@@ -64,7 +64,8 @@ export function initOverture({ onOpen } = {}) {
 
   const seal = ov.querySelector("#seal");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const seen = sessionStorage.getItem("kr-opened") === "yes";
+  const forced = new URLSearchParams(location.search).has("open");
+  const seen = forced || sessionStorage.getItem("kr-opened") === "yes";
 
   const release = () => {
     ov.classList.add("is-done");

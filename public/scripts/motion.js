@@ -73,7 +73,15 @@ export function initParallax() {
   update();
 }
 
-/* ---------- Ambient drifting petals ---------- */
+/* ---------- Ambient background ----------
+ * Three quiet layers, all CSS-animated so nothing runs on the main thread:
+ *   1. a slow "temple light" aurora that drifts behind everything
+ *   2. floating diya embers that rise like lamp light
+ *   3. drifting jasmine petals
+ * Density scales down on small or low-core devices, and the whole layer is
+ * skipped entirely under prefers-reduced-motion.
+ */
+
 const PETAL_SVG = `
 <svg viewBox="0 0 24 30" fill="none" aria-hidden="true">
   <path d="M12 1C6.6 8 4 13.4 4 17.6 4 23.4 7.6 27 12 27s8-3.6 8-9.4C20 13.4 17.4 8 12 1z"
@@ -82,37 +90,60 @@ const PETAL_SVG = `
 </svg>`;
 
 export function initAmbient() {
-  if (reduceMotion()) return;
   const layer = document.querySelector(".ambient");
   if (!layer) return;
+  if (reduceMotion()) return;
 
-  // Fewer petals on small / low-core devices
   const wide = window.innerWidth > 900;
   const beefy = (navigator.hardwareConcurrency || 4) >= 4;
-  const count = wide && beefy ? 11 : 6;
+  const tier = wide && beefy ? 2 : wide || beefy ? 1 : 0;
 
   const frag = document.createDocumentFragment();
-  for (let i = 0; i < count; i++) {
+
+  /* 1. Aurora: two huge, very soft, slowly wandering colour fields. */
+  for (let i = 0; i < 2; i++) {
+    const a = document.createElement("span");
+    a.className = `aurora aurora--${i + 1}`;
+    frag.appendChild(a);
+  }
+
+  /* 2. Diya embers: small warm points that rise and fade. */
+  const embers = [6, 10, 14][tier];
+  for (let i = 0; i < embers; i++) {
+    const e = document.createElement("span");
+    e.className = "ember";
+    e.style.left = `${Math.random() * 100}%`;
+    e.style.setProperty("--size", `${2 + Math.random() * 3}px`);
+    e.style.setProperty("--dur", `${13 + Math.random() * 14}s`);
+    e.style.setProperty("--delay", `${-Math.random() * 26}s`);
+    e.style.setProperty("--sway", `${(Math.random() - 0.5) * 120}px`);
+    e.style.setProperty("--peak", (0.35 + Math.random() * 0.4).toFixed(2));
+    frag.appendChild(e);
+  }
+
+  /* 3. Jasmine petals. */
+  const petals = [5, 8, 12][tier];
+  for (let i = 0; i < petals; i++) {
     const p = document.createElement("span");
     p.className = "petal";
     p.innerHTML = PETAL_SVG;
-    const size = 9 + Math.random() * 13;
     p.style.left = `${Math.random() * 100}%`;
-    p.style.width = `${size}px`;
+    p.style.width = `${9 + Math.random() * 13}px`;
     p.style.setProperty("--dur", `${20 + Math.random() * 20}s`);
     p.style.setProperty("--delay", `${-Math.random() * 30}s`);
     p.style.setProperty("--drift", `${(Math.random() - 0.5) * 220}px`);
     p.style.setProperty("--spin", `${140 + Math.random() * 320}deg`);
-    p.style.setProperty("--peak", (0.14 + Math.random() * 0.16).toFixed(2));
+    p.style.setProperty("--peak", (0.12 + Math.random() * 0.14).toFixed(2));
     frag.appendChild(p);
   }
+
   layer.appendChild(frag);
 
-  // Pause the whole layer when the tab is hidden
+  /* Stop everything while the tab is hidden so we never burn battery. */
+  const setPlay = (state) => {
+    layer.querySelectorAll("span").forEach((n) => { n.style.animationPlayState = state; });
+  };
   document.addEventListener("visibilitychange", () => {
-    layer.style.animationPlayState = document.hidden ? "paused" : "running";
-    layer.querySelectorAll(".petal").forEach((p) => {
-      p.style.animationPlayState = document.hidden ? "paused" : "running";
-    });
+    setPlay(document.hidden ? "paused" : "running");
   });
 }

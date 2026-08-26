@@ -120,7 +120,7 @@ export const WEDDING = {
   patrika: { pdf: "patrika/patrika.pdf", preview: "photos/patrika-card.jpg" },
 
   meta: {
-    title: "Krishnamurthy & Roshini — 30 October 2026",
+    title: "Krishnamurthy & Roshini · 30 October 2026",
     description:
       "Together with our families, we invite you to celebrate our wedding. Muhurtham 5:30 AM, Friday 30 October 2026, Rajagopal Thirumana Mandapam, Chennai.",
   },

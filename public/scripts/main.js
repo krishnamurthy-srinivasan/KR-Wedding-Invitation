@@ -7,6 +7,7 @@ import { initNav, initOverture } from "./nav.js";
 import { initAudio } from "./audio.js";
 import { initScratch } from "./scratch.js";
 import { initGopuram } from "./gopuram.js";
+import { burst } from "./confetti.js";
 
 /* ---------- Fill in ornament placeholders ---------- */
 function mountOrnaments() {
@@ -112,7 +113,12 @@ function boot() {
 
   initCountdown(document.querySelector(".countdown"), WEDDING.date.muhurthamStartISO);
   initLightbox(document.querySelector(".gallery"));
-  initScratch(document.querySelector(".scratch-card"));
+  const scratchCard = document.querySelector(".scratch-card");
+  initScratch(scratchCard);
+  scratchCard?.addEventListener("scratch:done", () => {
+    const card = scratchCard.querySelector(".scratch");
+    if (card) burst(card);
+  });
   initGopuram(document.querySelector(".gopuram"));
 
   document.documentElement.classList.add("is-ready");
