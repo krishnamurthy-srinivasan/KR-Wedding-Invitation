@@ -74,19 +74,34 @@ export function initParallax() {
 }
 
 /* ---------- Ambient background ----------
- * Three quiet layers, all CSS-animated so nothing runs on the main thread:
- *   1. a slow "temple light" aurora that drifts behind everything
- *   2. floating diya embers that rise like lamp light
- *   3. drifting jasmine petals
- * Density scales down on small or low-core devices, and the whole layer is
- * skipped entirely under prefers-reduced-motion.
+ * Five layers, all pure CSS animation so nothing runs on the main thread:
+ *   1. aurora        slow wandering colour fields
+ *   2. kolam         large rotating temple-geometry rings
+ *   3. stars         a faint drifting starfield (comes alive in dark mode)
+ *   4. embers        rising diya lights
+ *   5. petals        falling jasmine
+ * Density scales with the device, everything pauses when the tab is hidden,
+ * and the whole layer is skipped under prefers-reduced-motion.
  */
 
 const PETAL_SVG = `
 <svg viewBox="0 0 24 30" fill="none" aria-hidden="true">
   <path d="M12 1C6.6 8 4 13.4 4 17.6 4 23.4 7.6 27 12 27s8-3.6 8-9.4C20 13.4 17.4 8 12 1z"
-        fill="currentColor" opacity="0.55"/>
+        fill="currentColor" opacity="0.6"/>
   <path d="M12 27V6" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
+</svg>`;
+
+const KOLAM_SVG = `
+<svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="0.7" fill="none">
+    <circle cx="100" cy="100" r="94"/>
+    <circle cx="100" cy="100" r="70"/>
+    <circle cx="100" cy="100" r="44"/>
+    <path d="M100 6c26 26 26 62 0 88s-62 26-88 0"/>
+    <path d="M100 194c-26-26-26-62 0-88s62-26 88 0"/>
+    <path d="M100 30c18 18 18 42 0 60s-42 18-60 0"/>
+    <path d="M100 170c-18-18-18-42 0-60s42-18 60 0"/>
+  </g>
 </svg>`;
 
 export function initAmbient() {
@@ -99,51 +114,73 @@ export function initAmbient() {
   const tier = wide && beefy ? 2 : wide || beefy ? 1 : 0;
 
   const frag = document.createDocumentFragment();
+  const add = (cls, css = "", html = "") => {
+    const n = document.createElement("span");
+    n.className = cls;
+    if (css) n.style.cssText = css;
+    if (html) n.innerHTML = html;
+    frag.appendChild(n);
+    return n;
+  };
 
-  /* 1. Aurora: two huge, very soft, slowly wandering colour fields. */
-  for (let i = 0; i < 2; i++) {
-    const a = document.createElement("span");
-    a.className = `aurora aurora--${i + 1}`;
-    frag.appendChild(a);
+  /* 1. Aurora */
+  add("aurora aurora--1");
+  add("aurora aurora--2");
+  if (tier >= 1) add("aurora aurora--3");
+
+  /* 2. Rotating kolam rings */
+  const kolams = [1, 2, 2][tier];
+  const spots = [
+    "top:-16vmax; left:-12vmax; width:56vmax;",
+    "bottom:-20vmax; right:-14vmax; width:64vmax;",
+  ];
+  for (let i = 0; i < kolams; i++) {
+    const k = add("kolam", spots[i], KOLAM_SVG);
+    k.style.setProperty("--dur", `${150 + i * 70}s`);
+    k.style.setProperty("--dir", i % 2 ? "reverse" : "normal");
   }
 
-  /* 2. Diya embers: small warm points that rise and fade. */
-  const embers = [6, 10, 14][tier];
+  /* 3. Starfield */
+  const stars = [0, 26, 46][tier];
+  for (let i = 0; i < stars; i++) {
+    const s = add("star");
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.top = `${Math.random() * 100}%`;
+    s.style.setProperty("--size", `${1 + Math.random() * 2}px`);
+    s.style.setProperty("--dur", `${3 + Math.random() * 6}s`);
+    s.style.setProperty("--delay", `${-Math.random() * 8}s`);
+    s.style.setProperty("--peak", (0.3 + Math.random() * 0.6).toFixed(2));
+  }
+
+  /* 4. Diya embers */
+  const embers = [7, 12, 18][tier];
   for (let i = 0; i < embers; i++) {
-    const e = document.createElement("span");
-    e.className = "ember";
+    const e = add("ember");
     e.style.left = `${Math.random() * 100}%`;
-    e.style.setProperty("--size", `${2 + Math.random() * 3}px`);
-    e.style.setProperty("--dur", `${13 + Math.random() * 14}s`);
+    e.style.setProperty("--size", `${2 + Math.random() * 4}px`);
+    e.style.setProperty("--dur", `${12 + Math.random() * 14}s`);
     e.style.setProperty("--delay", `${-Math.random() * 26}s`);
-    e.style.setProperty("--sway", `${(Math.random() - 0.5) * 120}px`);
-    e.style.setProperty("--peak", (0.35 + Math.random() * 0.4).toFixed(2));
-    frag.appendChild(e);
+    e.style.setProperty("--sway", `${(Math.random() - 0.5) * 140}px`);
+    e.style.setProperty("--peak", (0.4 + Math.random() * 0.45).toFixed(2));
   }
 
-  /* 3. Jasmine petals. */
-  const petals = [5, 8, 12][tier];
+  /* 5. Jasmine petals */
+  const petals = [6, 10, 15][tier];
   for (let i = 0; i < petals; i++) {
-    const p = document.createElement("span");
-    p.className = "petal";
-    p.innerHTML = PETAL_SVG;
+    const p = add("petal", "", PETAL_SVG);
     p.style.left = `${Math.random() * 100}%`;
-    p.style.width = `${9 + Math.random() * 13}px`;
-    p.style.setProperty("--dur", `${20 + Math.random() * 20}s`);
+    p.style.width = `${9 + Math.random() * 14}px`;
+    p.style.setProperty("--dur", `${18 + Math.random() * 20}s`);
     p.style.setProperty("--delay", `${-Math.random() * 30}s`);
-    p.style.setProperty("--drift", `${(Math.random() - 0.5) * 220}px`);
+    p.style.setProperty("--drift", `${(Math.random() - 0.5) * 240}px`);
     p.style.setProperty("--spin", `${140 + Math.random() * 320}deg`);
-    p.style.setProperty("--peak", (0.12 + Math.random() * 0.14).toFixed(2));
-    frag.appendChild(p);
+    p.style.setProperty("--peak", (0.16 + Math.random() * 0.18).toFixed(2));
   }
 
   layer.appendChild(frag);
 
-  /* Stop everything while the tab is hidden so we never burn battery. */
-  const setPlay = (state) => {
-    layer.querySelectorAll("span").forEach((n) => { n.style.animationPlayState = state; });
-  };
   document.addEventListener("visibilitychange", () => {
-    setPlay(document.hidden ? "paused" : "running");
+    const state = document.hidden ? "paused" : "running";
+    layer.querySelectorAll("span").forEach((n) => { n.style.animationPlayState = state; });
   });
 }

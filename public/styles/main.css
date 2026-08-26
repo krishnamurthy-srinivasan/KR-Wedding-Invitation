@@ -100,10 +100,12 @@ h1, h2, h3, .hero__names, .closing__names, .person__name, .venue__name {
 /* Dark cinematic sections */
 .section--deep {
   background: var(--background-deep);
-  color: var(--paper-warm);
-  --foreground: #f3e6d4;
-  --muted: #b79c86;
-  --border: rgba(201, 162, 92, 0.30);
+  color: var(--on-deep);
+  /* Inside a deep section the ink inverts, in either theme. */
+  --foreground: var(--on-deep);
+  --foreground-soft: #e6d8f5;
+  --muted: #b9a4cf;
+  --border: rgba(217, 181, 105, 0.30);
 }
 .section--deep .eyebrow { color: var(--gold-light); }
 

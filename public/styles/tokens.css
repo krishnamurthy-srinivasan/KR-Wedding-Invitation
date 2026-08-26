@@ -5,35 +5,35 @@
    ============================================================ */
 
 :root {
-  /* --- Ground: warm ivory paper against royal purple --- */
-  --background:        #f7f2ea;  /* ivory, slightly cooler than before */
-  --background-alt:    #efe7db;  /* deeper band */
-  --background-deep:   #2b1145;  /* royal purple — the cinematic ground */
-  --background-deeper: #1d0a31;  /* aubergine, for the footer */
-  --paper-warm:        #fcf8f1;
+  /* ============ LIGHT THEME (ivory paper) ============ */
+  --background:        #f7f2ea;
+  --background-alt:    #efe7db;
+  --background-deep:   #2b1145;
+  --background-deeper: #1d0a31;
+  --paper-warm:        #fcf8f1;   /* raised surface */
+  --on-deep:           #fcf8f1;   /* text on any dark section */
 
-  /* --- Ink --- */
-  --foreground:        #2f1b47;  /* deep violet-ink, reads near-black */
+  --foreground:        #2f1b47;
   --foreground-soft:   #4a3163;
-  --muted:             #7c6690;  /* muted mauve */
+  --muted:             #7c6690;
   --muted-light:       #b6a2c6;
 
-  /* --- Accents --- */
-  --accent:            #6d2c91;  /* royal purple accent */
+  --accent:            #6d2c91;
   --accent-deep:       #4a1a66;
-  --accent-secondary:  #8e1749;  /* kumkum-rose, from the silk borders */
+  --accent-secondary:  #8e1749;
   --peacock:           #12665f;
 
-  /* --- Metal: antique / temple brass, never #FFD700 --- */
   --gold:              #b08d3f;
   --gold-light:        #d9b569;
   --gold-pale:         #ecd9ab;
   --gold-deep:         #85661f;
 
-  /* --- Lines --- */
   --border:            rgba(176, 141, 63, 0.34);
   --border-strong:     rgba(176, 141, 63, 0.62);
   --border-ink:        rgba(47, 27, 71, 0.14);
+
+  --scrim:             rgba(43, 17, 69, 0.55);
+  --shadow:            rgba(29, 10, 49, 0.45);
 
   /* --- Type --- */
   --font-display: "Cormorant Garamond", "Cormorant", Didot, "Hoefler Text", Baskerville, Georgia, serif;
@@ -62,4 +62,40 @@
   --dur-slow:   1.5s;
   --dur-mid:    0.9s;
   --dur-fast:   0.45s;
+}
+
+
+/* ============ DARK THEME (default) ============
+   The ivory paper bands become a light royal purple, and the gold shifts to a
+   brighter champagne so it still reads as metal against a dark ground. */
+[data-theme="dark"] {
+  --background:        #241041;   /* was ivory  -> light royal purple */
+  --background-alt:    #2e1552;   /* was deeper ivory */
+  --background-deep:   #170826;   /* the cinematic sections go deeper still */
+  --background-deeper: #100519;
+  --paper-warm:        #33195c;   /* raised surface */
+  --on-deep:           #f6eeff;   /* text on any dark section */
+
+  --foreground:        #f2e9ff;
+  --foreground-soft:   #d9c9ec;
+  --muted:             #ab95c4;
+  --muted-light:       #c9b8dd;
+
+  --accent:            #c79bec;   /* lifted so it reads on a dark ground */
+  --accent-deep:       #a877d6;
+  --accent-secondary:  #e08bb0;
+
+  --gold:              #d9b569;
+  --gold-light:        #f0d69b;
+  --gold-pale:         #f7e9c8;
+  --gold-deep:         #c9a25c;
+
+  --border:            rgba(217, 181, 105, 0.30);
+  --border-strong:     rgba(217, 181, 105, 0.55);
+  --border-ink:        rgba(242, 233, 255, 0.14);
+
+  --scrim:             rgba(10, 4, 18, 0.62);
+  --shadow:            rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
 }

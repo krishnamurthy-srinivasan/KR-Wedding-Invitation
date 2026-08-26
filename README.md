@@ -88,12 +88,13 @@ Text is taken verbatim from `assets/patrika.md`.
 
 | Where | What |
 |---|---|
+| Theme | Dark / light toggle, bottom-right. **Dark is the default.** In dark mode the ivory bands become light royal purple. Applied by an inline script before first paint, so there is no flash; the choice is remembered in `localStorage`. |
 | Opening | A sealed purple envelope. Pressing the gold wax seal unfolds all four flaps, lifts the invitation card out, and starts the music. Skipped for returning visitors in the same session and for reduced-motion. |
 | Music | `public/audio/theme.mp3`. **Never autoplays.** Starts only from the seal press, fades 0 → 0.34 over ~5s so it arrives under the reveal. Persistent mute button, bottom-right. Ducks to silence when the tab is hidden. |
 | Srirangam | The Rajagopuram eases OUT as you scroll (scale 1.34 → 1.00) via a native CSS `animation-timeline: view()`, with a rAF fallback. Placed here because the groom's lineage in the Patrika is ஸ்ரீரங்கம். |
 | Save the Date | A real canvas gold-foil scratch card. Clears itself past ~55%. A "Reveal instead" button gives the same result for keyboard/AT users, and the text underneath is always real DOM. |
-| Celebration | Clearing the scratch card fires a rose-petal and gold-foil burst (62 particles, ~2.6s, then the layer removes itself). |
-| Background | Three quiet ambient layers: a slow drifting aurora, rising diya embers, and jasmine petals. Density scales down on small or low-core devices; the whole layer is skipped under reduced motion and paused when the tab is hidden. |
+| Celebration | Clearing the scratch card fires a full-viewport celebration: two corner cannons, a shower from above, and a burst from the card. 200 particles over ~5s, then the layer removes itself. |
+| Background | Five ambient layers: drifting aurora fields, slowly rotating kolam geometry, a twinkling starfield (dark mode), rising diya embers, and falling jasmine. All pure CSS animation. Density scales to the device; skipped under reduced motion and paused when the tab is hidden. |
 | Gallery | Scrapbook layout — photos on white mounts, tilted at authored angles with washi tape. Tilts are fixed per slot, not random, so the composition is identical every visit. |
 
 ## Design system

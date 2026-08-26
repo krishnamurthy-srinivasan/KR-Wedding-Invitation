@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Krishnamurthy &amp; Roshini · 30 October 2026</title>
 <meta name="description" content="Together with our families, we invite you to celebrate our wedding. Muhurtham 5:30 AM, Friday 30 October 2026, Rajagopal Thirumana Mandapam, Chennai.">
-<meta name="theme-color" content="#f6efe1">
-<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#241041" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f7f2ea" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
 
 <!-- Social / WhatsApp preview -->
 <!-- SITE URL: if Vercel gives you a different domain, change these 4 absolute URLs. -->
@@ -26,6 +27,16 @@
 <meta name="twitter:title" content="Krishnamurthy &amp; Roshini">
 <meta name="twitter:description" content="Together with our families, we invite you to celebrate our wedding on Friday, 30 October 2026, in Chennai.">
 <meta name="twitter:image" content="https://krishnamurthy-roshini.vercel.app/og-image.jpg">
+
+<script>
+  /* Apply the theme before first paint so there is no flash.
+     Dark is this invitation's default; a stored choice always wins. */
+  (function () {
+    var t = "dark";
+    try { var saved = localStorage.getItem("kr-theme"); if (saved) t = saved; } catch (e) {}
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -131,6 +142,21 @@
   </span>
 </button>
 
+<!-- ========== THEME ========== -->
+<button id="theme-toggle" class="theme-btn" type="button" aria-pressed="true" aria-label="Switch to light theme">
+  <span class="theme-btn__sun" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+      <circle cx="12" cy="12" r="4.2"/>
+      <path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <span class="theme-btn__moon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+      <path d="M20 14.2A8.4 8.4 0 019.8 4a8.4 8.4 0 1010.2 10.2z" stroke-linejoin="round"/>
+    </svg>
+  </span>
+</button>
+
 <!-- ========== NAV ========== -->
 <nav class="nav" data-open="false" aria-label="Sections">
   <a class="nav__mark" href="#home">K <span class="script-amp">&amp;</span> R</a>
@@ -232,22 +258,30 @@
     </div>
   </section>
 
-  <!-- ========== GOPURAM ========== -->
-  <section class="gopuram" id="gopuram" aria-labelledby="gopuram-h">
-    <div class="gopuram__media">
-      <img src="photos/gopuram.jpg" width="736" height="1308" loading="lazy" decoding="async"
-           sizes="100vw" alt="The Rajagopuram of the Srirangam temple rising above the town at dawn">
-    </div>
-    <div class="gopuram__veil" aria-hidden="true"></div>
-    <div class="gopuram__copy">
-      <p class="eyebrow" data-reveal>ஸ்ரீரங்கம் · Srirangam</p>
-      <h2 class="gopuram__title" id="gopuram-h" data-reveal style="--delay:120ms">
-        <span class="line-mask"><span>Where our family</span></span>
-        <span class="line-mask" style="--delay:180ms"><span>began</span></span>
-      </h2>
-      <p class="gopuram__sub" data-reveal style="--delay:300ms">
-        Under the grace of Sri Kalyana Venkataramana Swamy
-      </p>
+  <!-- ========== GOPURAM ==========
+       The source is a 736px phone photo, so it is shown as a framed portrait
+       at close to its native size rather than stretched full-bleed. -->
+  <section class="section section--deep gopuram" id="gopuram" aria-labelledby="gopuram-h">
+    <div class="wrap gopuram__grid">
+      <figure class="gopuram__figure framed" data-corners data-reveal>
+        <div class="gopuram__media">
+          <img src="photos/gopuram.jpg" width="736" height="1308" loading="lazy" decoding="async"
+               sizes="(max-width: 879px) 82vw, 420px"
+               alt="The Rajagopuram of the Srirangam temple rising above the town at dawn">
+        </div>
+      </figure>
+
+      <div class="gopuram__copy">
+        <p class="eyebrow" data-reveal>ஸ்ரீரங்கம் · Srirangam</p>
+        <h2 class="gopuram__title" id="gopuram-h" data-reveal style="--delay:120ms">
+          <span class="line-mask"><span>Where our</span></span>
+          <span class="line-mask" style="--delay:180ms"><span>family began</span></span>
+        </h2>
+        <span class="divider draw" data-orn="divider" aria-hidden="true"></span>
+        <p class="gopuram__sub" data-reveal style="--delay:300ms">
+          Under the grace of Sri Kalyana Venkataramana Swamy
+        </p>
+      </div>
     </div>
   </section>
 

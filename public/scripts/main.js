@@ -8,6 +8,7 @@ import { initAudio } from "./audio.js";
 import { initScratch } from "./scratch.js";
 import { initGopuram } from "./gopuram.js";
 import { burst } from "./confetti.js";
+import { initTheme } from "./theme.js";
 
 /* ---------- Fill in ornament placeholders ---------- */
 function mountOrnaments() {
@@ -96,6 +97,7 @@ function wireVenue() {
 
 /* ---------- Boot ---------- */
 function boot() {
+  initTheme();
   mountOrnaments();
   buildEvents();
   buildGallery();

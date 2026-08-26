@@ -16,50 +16,65 @@ const COLOURS = [
   "#6d2c91", "#8e1749",              // purple / kumkum
 ];
 
-export function burst(origin, { count = 62 } = {}) {
-  const doc = origin.ownerDocument || document;
+/* Full-viewport celebration.
+ * Two side cannons fire inward and up, plus a rain of petals from above the
+ * fold, so the whole screen celebrates rather than a puff over one card. */
+export function burst(origin, { count = 200 } = {}) {
+  const doc = (origin && origin.ownerDocument) || document;
   const win = doc.defaultView || window;
   if (win.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const W = win.innerWidth, H = win.innerHeight;
 
   const layer = doc.createElement("div");
   layer.className = "burst";
   layer.setAttribute("aria-hidden", "true");
   doc.body.appendChild(layer);
 
-  const r = origin.getBoundingClientRect();
-  const ox = r.left + r.width / 2;
-  const oy = r.top + r.height / 2;
-
-  for (let i = 0; i < count; i++) {
+  const make = (x, y, angleDeg, spread, power, delayBase, drop) => {
     const bit = doc.createElement("span");
     bit.className = "burst__bit";
 
     const kind = Math.random();
-    bit.innerHTML = kind < 0.55 ? PETAL : kind < 0.8 ? LEAF : FOIL;
+    bit.innerHTML = kind < 0.5 ? PETAL : kind < 0.78 ? LEAF : FOIL;
     const colour = COLOURS[(Math.random() * COLOURS.length) | 0];
 
-    // Fan upward and outward from the card, then let gravity take over.
-    const angle = (-90 + (Math.random() - 0.5) * 130) * (Math.PI / 180);
-    const power = 190 + Math.random() * 300;
-    const dx = Math.cos(angle) * power + (Math.random() - 0.5) * 90;
-    const dy = Math.sin(angle) * power;
-    const fall = 320 + Math.random() * 420;   // how far it drifts down after
+    const a = (angleDeg + (Math.random() - 0.5) * spread) * (Math.PI / 180);
+    const p = power * (0.55 + Math.random() * 0.75);
+    const dx = Math.cos(a) * p;
+    const dy = Math.sin(a) * p;
+    const size = 9 + Math.random() * 15;
 
-    const size = 8 + Math.random() * 13;
     bit.style.cssText =
-      `position:fixed;display:block;left:${ox}px;top:${oy}px;` +
+      `position:fixed;display:block;left:${x}px;top:${y}px;` +
       `width:${size}px;height:${size}px;margin:${-size / 2}px 0 0 ${-size / 2}px;` +
       `pointer-events:none;opacity:0;color:${colour};`;
     bit.style.setProperty("--dx", `${dx.toFixed(0)}px`);
     bit.style.setProperty("--dy", `${dy.toFixed(0)}px`);
-    bit.style.setProperty("--fall", `${fall.toFixed(0)}px`);
-    bit.style.setProperty("--spin", `${(Math.random() - 0.5) * 900}deg`);
-    bit.style.setProperty("--dur", `${1.9 + Math.random() * 0.9}s`);
-    bit.style.setProperty("--delay", `${Math.random() * 0.16}s`);
-
+    bit.style.setProperty("--fall", `${drop + Math.random() * 500}px`);
+    bit.style.setProperty("--spin", `${(Math.random() - 0.5) * 1000}deg`);
+    bit.style.setProperty("--dur", `${2.4 + Math.random() * 1.6}s`);
+    bit.style.setProperty("--delay", `${delayBase + Math.random() * 0.5}s`);
     layer.appendChild(bit);
+  };
+
+  const each = Math.round(count / 4);
+
+  // Two cannons from the lower corners, firing inward and up.
+  for (let i = 0; i < each; i++) make(-10,    H * 0.9, -52,  46, W * 0.95, 0,    H * 0.9);
+  for (let i = 0; i < each; i++) make(W + 10, H * 0.9, -128, 46, W * 0.95, 0.08, H * 0.9);
+
+  // A shower from above the fold, so the top half celebrates too.
+  for (let i = 0; i < each; i++) {
+    make(Math.random() * W, -30, 90, 40, 140, Math.random() * 1.1, H + 200);
   }
 
-  // Tear the whole layer down once the longest bit has finished.
-  setTimeout(() => layer.remove(), 3200);
+  // And a burst out of whatever triggered it, so the source still feels alive.
+  if (origin) {
+    const r = origin.getBoundingClientRect();
+    const ox = r.left + r.width / 2, oy = r.top + r.height / 2;
+    for (let i = 0; i < each; i++) make(ox, oy, -90, 150, 420, 0, 460);
+  }
+
+  setTimeout(() => layer.remove(), 5200);
 }

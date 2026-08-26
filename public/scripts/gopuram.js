@@ -7,12 +7,12 @@
  * motion is identical.
  */
 
-const SCALE_IN = 1.34;   // as the band enters from below
+const SCALE_IN = 1.18;   // as the section enters from below
 const SCALE_OUT = 1.0;   // once it has travelled past
 
 export function initGopuram(section) {
   if (!section) return;
-  const media = section.querySelector(".gopuram__media");
+  const media = section.querySelector(".gopuram__media img");
   if (!media) return;
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -74,6 +74,5 @@ export function initGopuram(section) {
   io.observe(section);
 
   paint();
-  const img = media.querySelector("img");
-  if (img && !img.complete) img.addEventListener("load", paint, { once: true });
+  if (!media.complete) media.addEventListener("load", paint, { once: true });
 }
