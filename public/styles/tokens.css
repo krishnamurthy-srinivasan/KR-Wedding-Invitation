@@ -1,0 +1,64 @@
+/* ============================================================
+   Krishnamurthy & Roshini — Design Tokens
+   Palette derived from vibe-match-assets/: aged parchment ground,
+   antique gold filigree, deep kumkum crimson, temple brass.
+   ============================================================ */
+
+:root {
+  /* --- Ground: aged invitation parchment --- */
+  --background:        #f6efe1;  /* primary parchment */
+  --background-alt:    #efe4d0;  /* deeper card / band */
+  --background-deep:   #2a1410;  /* crimson-black, cinematic sections */
+  --paper-warm:        #fbf6ec;  /* lifted paper */
+
+  /* --- Ink --- */
+  --foreground:        #2e1b16;  /* warm near-black brown-ink */
+  --foreground-soft:   #4a3229;
+  --muted:             #8a6f5f;  /* secondary copy */
+  --muted-light:       #a89076;
+
+  /* --- Accents from the invitation --- */
+  --accent:            #8e1717;  /* deep kumkum crimson */
+  --accent-deep:       #6b0f0f;
+  --accent-secondary:  #1f3a63;  /* Krishna indigo (from template refs) */
+  --peacock:           #12665f;  /* peacock teal, used sparingly */
+
+  /* --- Metal: antique / temple brass, never #FFD700 --- */
+  --gold:              #a8823c;
+  --gold-light:        #c9a25c;
+  --gold-pale:         #e0cba3;
+  --gold-deep:         #7d5f28;
+
+  /* --- Lines --- */
+  --border:            rgba(168, 130, 60, 0.34);
+  --border-strong:     rgba(168, 130, 60, 0.62);
+  --border-ink:        rgba(46, 27, 22, 0.14);
+
+  /* --- Type --- */
+  --font-display: "Cormorant Garamond", "Cormorant", Didot, "Hoefler Text", Baskerville, Georgia, serif;
+  --font-body:    "Marcellus", "Hoefler Text", Palatino, Georgia, serif;
+  --font-sans:    "Jost", "Futura", "Avenir Next", system-ui, sans-serif;
+  --font-tamil:   "Noto Serif Tamil", "Tamil Sangam MN", "Tamil MN", Latha, serif;
+  --font-deva:    "Noto Serif Devanagari", "Devanagari Sangam MN", "Kohinoor Devanagari", serif;
+
+  /* --- Fluid type scale --- */
+  --step--1: clamp(0.78rem, 0.74rem + 0.18vw, 0.88rem);
+  --step-0:  clamp(0.95rem, 0.90rem + 0.24vw, 1.08rem);
+  --step-1:  clamp(1.15rem, 1.05rem + 0.5vw,  1.45rem);
+  --step-2:  clamp(1.45rem, 1.25rem + 0.95vw, 2.1rem);
+  --step-3:  clamp(1.9rem,  1.5rem  + 1.9vw,  3.1rem);
+  --step-4:  clamp(2.05rem, 1.35rem + 3.2vw,  4.6rem);
+  --step-5:  clamp(2.35rem, 1.15rem + 5.3vw,  6.8rem);
+
+  /* --- Rhythm --- */
+  --section-y:  clamp(5rem, 3rem + 9vw, 11rem);
+  --gutter:     clamp(1.25rem, 0.6rem + 3vw, 4rem);
+  --measure:    64ch;
+
+  /* --- Motion --- */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft:  cubic-bezier(0.33, 0.02, 0.15, 1);
+  --dur-slow:   1.5s;
+  --dur-mid:    0.9s;
+  --dur-fast:   0.45s;
+}
