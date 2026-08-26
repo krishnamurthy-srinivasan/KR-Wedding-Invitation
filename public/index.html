@@ -68,14 +68,52 @@
 
 <body>
 
-<!-- ========== OVERTURE ========== -->
-<div class="overture" role="dialog" aria-label="Invitation opening">
-  <div class="overture__inner overture__fade">
-    <span class="overture__seal draw" data-orn="kolam" aria-hidden="true"></span>
-    <p class="overture__om tamil">ஸ்ரீ:</p>
-    <p class="overture__names">Krishnamurthy <span class="script-amp">&amp;</span> Roshini</p>
-    <p class="overture__date">30 · 10 · 2026</p>
-    <button type="button" class="overture__skip">Enter the invitation</button>
+<!-- ========== OVERTURE: sealed envelope ========== -->
+<div class="overture" id="overture" role="dialog" aria-modal="true" aria-labelledby="ov-names">
+  <div class="overture__glow" aria-hidden="true"></div>
+
+  <div class="overture__stage">
+    <p class="overture__om tamil" aria-hidden="true">ஸ்ரீ:</p>
+
+    <div class="envelope">
+      <span class="env__flap env__flap--l" aria-hidden="true"></span>
+      <span class="env__flap env__flap--r" aria-hidden="true"></span>
+      <span class="env__flap env__flap--b" aria-hidden="true"></span>
+      <span class="env__flap env__flap--t" aria-hidden="true">
+        <span class="env__vine" data-orn="vine"></span>
+      </span>
+
+      <!-- the invitation card that slides out -->
+      <div class="env__card" aria-hidden="true">
+        <span class="env__card-orn draw" data-orn="divider"></span>
+        <p class="env__card-eyebrow">Together with our families</p>
+        <p class="env__card-names">Krishnamurthy <em>&amp;</em> Roshini</p>
+        <p class="env__card-date">30 · 10 · 2026</p>
+      </div>
+
+    <button type="button" class="seal" id="seal" aria-describedby="seal-hint">
+      <span class="seal__ring" aria-hidden="true"></span>
+      <span class="seal__face" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <g stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 9c-5 6-7.5 11-7.5 15 0 4.4 3.2 7.4 7.5 7.4s7.5-3 7.5-7.4C31.5 20 29 15 24 9z"/>
+            <path d="M24 31.4c-6 0-11.6-2.6-16-7.2 2.2 6.9 8.4 11.6 16 11.6s13.8-4.7 16-11.6c-4.4 4.6-10 7.2-16 7.2z"/>
+          </g>
+        </svg>
+      </span>
+      <span class="seal__label">K <i>&amp;</i> R</span>
+      <span class="visually-hidden">Open the invitation</span>
+    </button>
+    </div>
+
+
+
+    <p class="overture__hint" id="seal-hint">
+      <span class="overture__hint-main">Press the seal to open</span>
+      <span class="overture__hint-sub">Music will begin softly — you can mute it any time</span>
+    </p>
+
+    <p class="visually-hidden" id="ov-names">Invitation of Krishnamurthy and Roshini, 30 October 2026</p>
   </div>
 </div>
 
@@ -83,6 +121,15 @@
 
 <!-- ========== AMBIENT ========== -->
 <div class="ambient" aria-hidden="true"></div>
+
+<!-- ========== MUSIC ========== -->
+<audio id="theme-audio" src="audio/theme.mp3" preload="none" loop></audio>
+<button id="music-toggle" class="music" type="button" hidden aria-pressed="false" aria-label="Play music">
+  <span class="music__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="music__off" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9v6h4l5 4V5L8 9H4zM17 9l4 6M21 9l-4 6"/></svg>
+  </span>
+</button>
 
 <!-- ========== NAV ========== -->
 <nav class="nav" data-open="false" aria-label="Sections">
@@ -185,6 +232,25 @@
     </div>
   </section>
 
+  <!-- ========== GOPURAM ========== -->
+  <section class="gopuram" id="gopuram" aria-labelledby="gopuram-h">
+    <div class="gopuram__media">
+      <img src="photos/gopuram.jpg" width="736" height="1308" loading="lazy" decoding="async"
+           sizes="100vw" alt="The Rajagopuram of the Srirangam temple rising above the town at dawn">
+    </div>
+    <div class="gopuram__veil" aria-hidden="true"></div>
+    <div class="gopuram__copy">
+      <p class="eyebrow" data-reveal>ஸ்ரீரங்கம் · Srirangam</p>
+      <h2 class="gopuram__title" id="gopuram-h" data-reveal style="--delay:120ms">
+        <span class="line-mask"><span>Where our family</span></span>
+        <span class="line-mask" style="--delay:180ms"><span>began</span></span>
+      </h2>
+      <p class="gopuram__sub" data-reveal style="--delay:300ms">
+        Under the grace of Sri Kalyana Venkataramana Swamy
+      </p>
+    </div>
+  </section>
+
   <!-- ========== COUPLE ========== -->
   <section class="section couple" id="couple">
     <div class="wrap">
@@ -225,6 +291,30 @@
           <p class="person__parents">Sri. Ravishankar<br>&amp; Smt. Gayathri</p>
           <p class="person__gp">Granddaughter of (Late) Sri. T.R. Gopalan &amp; Smt. Vanajakshi</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCRATCH ========== -->
+  <section class="section section--deep scratch-sec" id="save-the-date">
+    <div class="wrap--narrow center">
+      <p class="eyebrow" data-reveal>A little something</p>
+      <span class="divider draw" data-orn="divider" aria-hidden="true"></span>
+
+      <div class="scratch-card" data-reveal style="--delay:120ms">
+        <div class="scratch framed" data-corners>
+          <div class="scratch__under">
+            <p class="scratch__label">Save the Date</p>
+            <p class="scratch__date">30 · 10 · 2026</p>
+            <p class="scratch__meta">Muhurtham 5:30 AM · Thula Lagnam</p>
+          </div>
+          <canvas class="scratch__foil" aria-hidden="true"></canvas>
+        </div>
+
+        <p class="scratch__hint">Scratch the gold with your finger</p>
+        <button class="btn scratch__btn" type="button" data-scratch-reveal>
+          <span>Reveal instead</span>
+        </button>
       </div>
     </div>
   </section>

@@ -1,38 +1,182 @@
-/* ======================= OVERTURE (intro curtain) ======================= */
+/* ======================= OVERTURE: sealed envelope ======================= */
 .overture {
   position: fixed; inset: 0; z-index: 200;
   display: grid; place-items: center;
-  background: var(--background-deep);
-  color: var(--gold-pale);
-  text-align: center;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 42%, #3d1a5f 0%, var(--background-deep) 45%, var(--background-deeper) 100%);
   padding: var(--gutter);
-  transition: opacity 1.1s var(--ease-out), visibility 1.1s;
+  overflow: hidden;
+  transition: opacity 1.2s var(--ease-out), visibility 1.2s;
 }
-.overture[hidden] { display: none; }
 .overture.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
 
-.overture__inner { display: grid; gap: 1.6rem; justify-items: center; max-width: 40ch; }
-.overture__seal { width: clamp(84px, 16vw, 122px); color: var(--gold-light); }
-.overture__om { font-family: var(--font-deva); font-size: var(--step-2); color: var(--gold-light); }
-.overture__names {
-  font-family: var(--font-display); font-weight: 300;
-  font-size: var(--step-3); line-height: 1.15; color: var(--paper-warm);
+/* slow breathing halo behind the envelope */
+.overture__glow {
+  position: absolute; width: min(120vmin, 900px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(217,181,105,0.16), transparent 62%);
+  filter: blur(28px);
 }
-.overture__date { font-family: var(--font-sans); font-size: var(--step--1); letter-spacing: 0.44em; color: var(--gold-light); }
-.overture__skip {
-  margin-top: 1.4rem; font-family: var(--font-sans); font-size: 0.72rem;
-  letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted-light);
-  border-bottom: 1px solid transparent; padding: 0.6rem 0.4rem; min-height: 44px;
+@media (prefers-reduced-motion: no-preference) {
+  .overture__glow { animation: halo 7s var(--ease-soft) infinite; }
+  @keyframes halo { 0%,100% { transform: scale(0.94); opacity: 0.75 } 50% { transform: scale(1.06); opacity: 1 } }
 }
-.overture__skip:hover, .overture__skip:focus-visible { color: var(--gold-light); border-bottom-color: currentColor; }
 
-.overture__fade > * { opacity: 0; animation: ov-rise 1.3s var(--ease-out) forwards; }
-.overture__fade > *:nth-child(1) { animation-delay: 0.15s; }
-.overture__fade > *:nth-child(2) { animation-delay: 0.45s; }
-.overture__fade > *:nth-child(3) { animation-delay: 0.75s; }
-.overture__fade > *:nth-child(4) { animation-delay: 1.05s; }
-.overture__fade > *:nth-child(5) { animation-delay: 1.45s; }
-@keyframes ov-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.overture__stage {
+  position: relative; display: grid; justify-items: center; gap: clamp(1.2rem, 3vw, 2rem);
+  width: min(100%, 460px);
+}
+.overture__om {
+  font-size: var(--step-2); color: var(--gold-light); letter-spacing: 0.06em;
+  opacity: 0; animation: ov-in 1.1s var(--ease-out) 0.2s forwards;
+}
+
+/* ---- the envelope ---- */
+.envelope {
+  position: relative;
+  width: min(80vw, 350px);
+  aspect-ratio: 1 / 0.82;   /* an invitation envelope, not a square */
+  opacity: 0; animation: ov-in 1.2s var(--ease-out) 0.45s forwards;
+  transform-style: preserve-3d;
+}
+
+/* body of the envelope */
+.envelope::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(150deg, #4a1c68, #35124e 60%, #2a0f40);
+  box-shadow: 0 26px 70px -26px rgba(0,0,0,0.75), inset 0 0 0 1px rgba(217,181,105,0.30);
+}
+
+/* Four triangular flaps meeting at the centre. Each is its own positioned
+   layer with a triangle clip, so they can hinge outward independently. */
+.env__flap {
+  position: absolute; inset: 0;
+  transition: transform 1.15s var(--ease-out);
+  backface-visibility: hidden;
+  background: linear-gradient(160deg, #6b3089, #4a1c66 70%);
+  box-shadow: inset 0 0 0 1px rgba(217,181,105,0.26);
+}
+.env__flap--t { clip-path: polygon(0 0, 100% 0, 50% 62%);       transform-origin: top;    z-index: 4; }
+.env__flap--b { clip-path: polygon(0 100%, 100% 100%, 50% 44%); transform-origin: bottom; z-index: 2; }
+.env__flap--l { clip-path: polygon(0 0, 0 100%, 52% 50%);       transform-origin: left;   z-index: 3; }
+.env__flap--r { clip-path: polygon(100% 0, 100% 100%, 48% 50%); transform-origin: right;  z-index: 3; }
+
+/* a touch of shading so the folds read as paper */
+.env__flap--l { background: linear-gradient(90deg, #5d2778, #471a63); }
+.env__flap--r { background: linear-gradient(270deg, #5d2778, #471a63); }
+.env__flap--b { background: linear-gradient(0deg, #40174d, #532370); }
+
+/* gold vine drawn on the top flap */
+.env__vine {
+  position: absolute; top: 9%; left: 27%; width: 46%; display: block;
+  color: var(--gold-light); opacity: 0.9;
+}
+.env__vine svg { width: 100%; height: auto; }
+
+/* the card that rises out */
+.env__card {
+  position: absolute; left: 7%; right: 7%; top: 12%;
+  padding: clamp(1rem, 3.4vw, 1.6rem) clamp(0.8rem, 3vw, 1.4rem);
+  background: linear-gradient(170deg, var(--paper-warm), #f2e9da);
+  border: 1px solid rgba(176,141,63,0.5);
+  text-align: center; z-index: 1;
+  transition-property: transform, opacity, z-index;
+  transform: translateY(6%) scale(0.97); opacity: 0;
+  transition: transform 1.25s var(--ease-out) 0.5s, opacity 0.6s ease 0.5s;
+  box-shadow: 0 18px 40px -22px rgba(0,0,0,0.6);
+}
+.env__card-orn { display: block; color: var(--gold); margin-bottom: 0.7rem; }
+.env__card-eyebrow {
+  font-family: var(--font-sans); font-size: clamp(0.5rem, 1.7vw, 0.62rem);
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted);
+}
+.env__card-names {
+  font-family: var(--font-display); font-weight: 300; color: var(--foreground);
+  font-size: clamp(1.15rem, 4.4vw, 1.65rem); line-height: 1.28; margin-top: 0.5rem;
+}
+.env__card-names em { font-style: italic; color: var(--gold-deep); }
+.env__card-date {
+  margin-top: 0.5rem; font-family: var(--font-sans);
+  font-size: clamp(0.56rem, 1.9vw, 0.7rem); letter-spacing: 0.34em; color: var(--accent);
+  text-indent: 0.34em;
+}
+
+/* ---- the wax seal button ---- */
+.seal {
+  position: absolute; top: 58%; left: 50%;   /* on the top flap's apex, as wax sits */
+  /* centred on the envelope: see .envelope { position: relative } */
+  width: clamp(74px, 20vw, 96px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #c9a35a, var(--gold) 42%, #7d5c1c 100%);
+  box-shadow:
+    0 10px 26px -8px rgba(0,0,0,0.7),
+    inset 0 2px 5px rgba(255,235,190,0.55),
+    inset 0 -3px 7px rgba(0,0,0,0.35);
+  color: #43300c;
+  z-index: 6;
+  opacity: 0; animation: ov-in 1s var(--ease-out) 0.95s forwards;
+  transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+}
+.seal__ring {
+  position: absolute; inset: 7%; border-radius: 50%;
+  border: 1px dashed rgba(67,48,12,0.42);
+}
+.seal__face { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0.9; }
+.seal__face svg { width: 46%; height: auto; }
+.seal__label {
+  position: absolute; bottom: 18%;
+  font-family: var(--font-display); font-size: 0.62rem; letter-spacing: 0.14em;
+  color: rgba(67,48,12,0.85);
+}
+.seal__label i { font-style: italic; }
+.seal:hover, .seal:focus-visible { transform: translate(-50%,-50%) scale(1.06); }
+.seal:active { transform: translate(-50%,-50%) scale(0.96); }
+
+/* pulsing "press me" ring */
+.seal::after {
+  content: ""; position: absolute; inset: -6px; border-radius: 50%;
+  border: 1px solid var(--gold-light); opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .seal::after { animation: seal-pulse 2.6s var(--ease-soft) 1.8s infinite; }
+  @keyframes seal-pulse {
+    0%   { transform: scale(1);    opacity: 0.75 }
+    70%  { transform: scale(1.42); opacity: 0 }
+    100% { transform: scale(1.42); opacity: 0 }
+  }
+}
+
+.overture__hint {
+  display: grid; gap: 0.4rem; text-align: center;
+  opacity: 0; animation: ov-in 1s var(--ease-out) 1.5s forwards;
+}
+.overture__hint-main {
+  font-family: var(--font-sans); font-size: 0.72rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold-light);
+}
+.overture__hint-sub {
+  font-size: 0.74rem; color: var(--muted-light); letter-spacing: 0.02em;
+}
+
+@keyframes ov-in { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
+
+/* ---- OPENING SEQUENCE ---- */
+.overture.is-opening .seal { opacity: 0; transform: translate(-50%,-50%) scale(0.35) rotate(-28deg); transition: opacity .5s ease, transform .6s var(--ease-out); pointer-events: none; }
+.overture.is-opening .seal::after { animation: none; }
+.overture.is-opening .overture__hint { opacity: 0; transition: opacity 0.4s ease; }
+.overture.is-opening .env__flap--t { transform: rotateX(-172deg); }
+.overture.is-opening .env__flap--l { transform: rotateY(168deg); }
+.overture.is-opening .env__flap--r { transform: rotateY(-168deg); }
+.overture.is-opening .env__flap--b { transform: rotateX(150deg); }
+.overture.is-opening .env__card   { transform: translateY(-34%) scale(1.06); opacity: 1; z-index: 7; }
+.overture.is-opening .envelope    { transform: scale(1.06); transition: transform 1.4s var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  .overture__om, .envelope, .seal, .overture__hint { opacity: 1; animation: none; }
+  .env__flap, .env__card, .envelope, .seal { transition: none; }
+  .env__card { opacity: 1; transform: none; }
+}
 
 /* ======================= NAV ======================= */
 .nav {
@@ -350,17 +494,23 @@
 
 /* Art-directed asymmetric placement (desktop) */
 @media (min-width: 900px) {
-  .gallery__grid { grid-auto-flow: dense; align-items: start; }
-  .shot--a { grid-column: span 2; aspect-ratio: 4/5; }
-  .shot--b { grid-column: span 4; aspect-ratio: 16/7; }
-  .shot--c { grid-column: span 2; aspect-ratio: 4/5; margin-top: clamp(1rem, 2.5vw, 2.4rem); }
-  .shot--d { grid-column: span 2; aspect-ratio: 4/5; }
-  .shot--e { grid-column: span 2; aspect-ratio: 4/5; margin-top: clamp(1rem, 2.5vw, 2.4rem); }
-  .shot--f { grid-column: span 3; aspect-ratio: 16/9; }
+  .gallery__grid { align-items: start; }
+  .shot--a { grid-column: span 2; }
+  .shot--b { grid-column: span 4; }
+  .shot--c { grid-column: span 2; margin-top: clamp(1.5rem, 4vw, 3.4rem); }
+  .shot--d { grid-column: span 2; }
+  .shot--e { grid-column: span 2; margin-top: clamp(1rem, 3vw, 2.6rem); }
+  .shot--f { grid-column: span 2; margin-top: clamp(0.5rem, 2vw, 1.6rem); }
+  .shot--a img, .shot--c img, .shot--d img { aspect-ratio: 4/5; }
+  .shot--b img { aspect-ratio: 16/8; }
+  .shot--e img, .shot--f img { aspect-ratio: 4/4.2; }
 }
 @media (max-width: 899px) {
-  .shot { aspect-ratio: 3/4; }
-  .shot--b, .shot--e { grid-column: span 2; aspect-ratio: 16/9; }
+  .gallery__grid { gap: clamp(1.1rem, 4vw, 1.8rem); }
+  .shot img { aspect-ratio: 3/4; }
+  .shot--b { grid-column: span 2; }
+  .shot--b img { aspect-ratio: 16/9; }
+  .shot--c, .shot--e, .shot--f { margin-top: 0; }
 }
 
 /* Lightbox */
@@ -492,4 +642,145 @@
 }
 @media (min-width: 820px) {
   .couple__names { grid-template-columns: 1fr auto 1fr; gap: clamp(1.5rem, 4vw, 3.5rem); }
+}
+
+/* ======================= MUSIC CONTROL ======================= */
+.music {
+  position: fixed; right: clamp(0.9rem, 2.4vw, 1.6rem); bottom: clamp(0.9rem, 2.4vw, 1.6rem);
+  z-index: 130;
+  width: 54px; height: 54px; min-width: 54px; min-height: 54px; border-radius: 50%;
+  display: grid; place-items: center; flex: none;
+  background: color-mix(in srgb, var(--background-deep) 90%, transparent);
+  border: 1px solid var(--border-strong);
+  color: var(--gold-light);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px -10px rgba(0,0,0,0.55);
+  opacity: 0; transform: translateY(12px) scale(0.9);
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out),
+              border-color .4s ease, color .4s ease;
+}
+.music.is-in { opacity: 1; transform: none; }
+.music:hover, .music:focus-visible { color: var(--gold-pale); border-color: var(--gold-light); }
+
+.music__bars { display: none; align-items: flex-end; gap: 3px; height: 17px; }
+.music__bars i { width: 2.5px; background: currentColor; height: 40%; border-radius: 1px; }
+.music[data-on="true"] .music__bars { display: flex; }
+.music[data-on="true"] .music__off { display: none; }
+.music__off svg { width: 21px; height: 21px; }
+@media (prefers-reduced-motion: no-preference) {
+  .music[data-on="true"] .music__bars i { animation: eq 1.1s ease-in-out infinite; }
+  .music__bars i:nth-child(2) { animation-delay: .18s }
+  .music__bars i:nth-child(3) { animation-delay: .36s }
+  .music__bars i:nth-child(4) { animation-delay: .54s }
+  @keyframes eq { 0%,100% { height: 30% } 50% { height: 100% } }
+}
+
+/* ======================= GOPURAM ======================= */
+.gopuram {
+  position: relative;
+  min-height: clamp(520px, 88svh, 900px);
+  display: grid; place-items: center;
+  overflow: clip;
+  background: var(--background-deep);
+  isolation: isolate;
+}
+.gopuram__media { position: absolute; inset: 0; will-change: transform; }
+.gopuram__media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+.gopuram__veil {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, var(--background-deep) 0%, rgba(43,17,69,0.10) 22%,
+                    rgba(43,17,69,0.18) 55%, rgba(29,10,49,0.92) 92%, var(--background-deep) 100%),
+    radial-gradient(ellipse 62% 34% at 50% 82%, rgba(29,10,49,0.86), transparent 74%);
+}
+.gopuram__copy {
+  position: relative; z-index: 2; text-align: center;
+  padding: var(--gutter); width: min(100%, 760px);
+  align-self: end; padding-bottom: clamp(3rem, 9vh, 6rem);
+}
+.gopuram__copy .eyebrow { color: var(--gold-light); font-family: var(--font-tamil); letter-spacing: 0.2em; }
+.gopuram__title {
+  font-family: var(--font-display); font-weight: 300; color: var(--paper-warm);
+  font-size: var(--step-4); line-height: 1.06; margin-top: 0.9rem;
+  text-shadow: 0 2px 30px rgba(29,10,49,0.7);
+}
+.gopuram__sub {
+  margin-top: 1.1rem; color: var(--gold-pale); font-size: var(--step-0);
+  letter-spacing: 0.05em; text-shadow: 0 1px 18px rgba(29,10,49,0.8);
+}
+
+/* ======================= SCRATCH CARD ======================= */
+.scratch-sec .divider { margin-block: clamp(1.4rem, 3vw, 2.2rem); }
+.scratch {
+  position: relative; margin-inline: auto; margin-top: clamp(1rem, 3vw, 1.6rem);
+  width: min(100%, 460px); aspect-ratio: 16 / 8.4;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(165deg, var(--paper-warm), #f0e7d7);
+  overflow: hidden;
+  box-shadow: 0 20px 46px -26px rgba(0,0,0,0.6);
+}
+.scratch__under {
+  position: absolute; inset: 0; display: grid; place-content: center; gap: 0.35rem;
+  text-align: center; padding: 1rem;
+}
+.scratch__label {
+  font-family: var(--font-display); font-style: italic; font-weight: 300;
+  font-size: clamp(1.5rem, 5.6vw, 2.15rem); color: var(--accent); line-height: 1.1;
+}
+.scratch__date {
+  font-family: var(--font-sans); font-size: clamp(0.74rem, 2.7vw, 0.95rem);
+  letter-spacing: 0.4em; color: var(--gold-deep); text-indent: 0.4em; margin-top: 0.35rem;
+  font-weight: 400;
+}
+.scratch__meta { font-size: var(--step--1); color: var(--muted); letter-spacing: 0.04em; }
+.scratch__foil {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  cursor: grab; touch-action: none;
+}
+.scratch__foil:active { cursor: grabbing; }
+.scratch[data-done="true"] .scratch__foil { pointer-events: none; }
+
+.scratch__hint {
+  margin-top: 1.1rem; font-family: var(--font-sans); font-size: 0.68rem;
+  letter-spacing: 0.26em; text-transform: uppercase; color: var(--muted-light);
+}
+.scratch__btn { margin-top: 1.1rem; }
+.scratch-card { display: grid; justify-items: center; }
+.scratch-card[data-done="true"] .scratch__btn,
+.scratch-card[data-done="true"] .scratch__hint { display: none; }
+
+/* ======================= GALLERY: SCRAPBOOK ======================= */
+.shot { position: relative; margin: 0; background: transparent; }
+/* the tilt lives on the button so it never fights the reveal transform */
+.shot button {
+  transform: rotate(var(--rot, 0deg)) translateY(var(--lift, 0));
+  transition: transform .8s var(--ease-out), box-shadow .8s var(--ease-out);
+}
+.shot button {
+  display: block; width: 100%; padding: clamp(7px, 1.1vw, 12px) clamp(7px, 1.1vw, 12px) clamp(24px, 3.4vw, 38px);
+  background: var(--paper-warm);
+  box-shadow: 0 14px 34px -20px rgba(29,10,49,0.55);
+  cursor: zoom-in; overflow: visible;
+}
+.shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease-out); }
+.shot::after { content: none; }
+.shot:hover { z-index: 5; }
+.shot:hover button, .shot button:focus-visible { transform: rotate(calc(var(--rot, 0deg) * 0.3)) translateY(calc(var(--lift, 0) - 7px)) scale(1.015); }
+.shot:hover button { box-shadow: 0 26px 54px -22px rgba(29,10,49,0.6); }
+.shot:hover img { transform: scale(1.03); }
+
+/* washi tape */
+.shot__tape {
+  position: absolute; top: -11px; width: clamp(58px, 9vw, 86px); height: 24px; z-index: 3;
+  background:
+    repeating-linear-gradient(135deg, rgba(217,181,105,0.42) 0 6px, rgba(236,217,171,0.34) 6px 12px);
+  border-left: 1px solid rgba(176,141,63,0.25);
+  border-right: 1px solid rgba(176,141,63,0.25);
+  box-shadow: 0 2px 6px rgba(29,10,49,0.14);
+}
+.shot__tape--tl { left: 8%;  transform: rotate(-7deg); }
+.shot__tape--tr { right: 8%; transform: rotate(6deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .shot button, .shot:hover button { transform: rotate(var(--rot, 0deg)); }
 }

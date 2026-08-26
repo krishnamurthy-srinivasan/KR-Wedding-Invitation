@@ -4,6 +4,9 @@ import { initReveals, prepareDrawings, initParallax, initAmbient } from "./motio
 import { initCountdown } from "./countdown.js";
 import { initLightbox } from "./lightbox.js";
 import { initNav, initOverture } from "./nav.js";
+import { initAudio } from "./audio.js";
+import { initScratch } from "./scratch.js";
+import { initGopuram } from "./gopuram.js";
 
 /* ---------- Fill in ornament placeholders ---------- */
 function mountOrnaments() {
@@ -48,22 +51,37 @@ function buildEvents() {
     .join("");
 }
 
-/* ---------- Gallery ---------- */
+/* ---------- Gallery: scrapbook ----------
+   Photographs are pinned at deliberate angles like a keepsake album.
+   The tilts/offsets are authored per-slot (not random) so the composition
+   is the same every visit and can be tuned by eye. */
+const SCRAP = [
+  { rot: -2.4, tape: "tl", lift: 0    },
+  { rot:  1.6, tape: "tr", lift: 3.5  },
+  { rot:  2.6, tape: "tl", lift: -2   },
+  { rot: -1.8, tape: "tr", lift: 4.5  },
+  { rot:  1.9, tape: "tl", lift: 1    },
+  { rot: -2.8, tape: "tr", lift: -3   },
+];
+
 function buildGallery() {
   const grid = document.querySelector(".gallery__grid");
   if (!grid) return;
   const slots = ["a", "b", "c", "d", "e", "f"];
 
   grid.innerHTML = WEDDING.gallery
-    .map(
-      (shot, i) => `
-    <figure class="shot shot--${slots[i % slots.length]}" data-reveal style="--delay:${(i % 3) * 110}ms">
+    .map((shot, i) => {
+      const s = SCRAP[i % SCRAP.length];
+      return `
+    <figure class="shot shot--${slots[i % slots.length]}" data-reveal
+            style="--rot:${s.rot}deg; --lift:${s.lift}%; --delay:${(i % 3) * 120}ms">
+      <span class="shot__tape shot__tape--${s.tape}" aria-hidden="true"></span>
       <button type="button" data-lb aria-label="View larger: ${shot.alt}">
         <img src="${shot.src}" width="${shot.w}" height="${shot.h}" alt="${shot.alt}"
-             loading="lazy" decoding="async" sizes="(max-width: 899px) 50vw, 33vw">
+             loading="lazy" decoding="async" sizes="(max-width: 899px) 88vw, 34vw">
       </button>
-    </figure>`
-    )
+    </figure>`;
+    })
     .join("");
 }
 
@@ -82,7 +100,9 @@ function boot() {
   buildGallery();
   wireVenue();
 
-  initOverture();
+  // Audio is armed but silent; only the seal press may start it.
+  const audio = initAudio();
+  initOverture({ onOpen: () => audio?.start() });
   initNav();
 
   prepareDrawings();
@@ -92,6 +112,8 @@ function boot() {
 
   initCountdown(document.querySelector(".countdown"), WEDDING.date.muhurthamStartISO);
   initLightbox(document.querySelector(".gallery"));
+  initScratch(document.querySelector(".scratch-card"));
+  initGopuram(document.querySelector(".gopuram"));
 
   document.documentElement.classList.add("is-ready");
 }

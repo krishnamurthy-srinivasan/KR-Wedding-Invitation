@@ -5,34 +5,35 @@
    ============================================================ */
 
 :root {
-  /* --- Ground: aged invitation parchment --- */
-  --background:        #f6efe1;  /* primary parchment */
-  --background-alt:    #efe4d0;  /* deeper card / band */
-  --background-deep:   #2a1410;  /* crimson-black, cinematic sections */
-  --paper-warm:        #fbf6ec;  /* lifted paper */
+  /* --- Ground: warm ivory paper against royal purple --- */
+  --background:        #f7f2ea;  /* ivory, slightly cooler than before */
+  --background-alt:    #efe7db;  /* deeper band */
+  --background-deep:   #2b1145;  /* royal purple — the cinematic ground */
+  --background-deeper: #1d0a31;  /* aubergine, for the footer */
+  --paper-warm:        #fcf8f1;
 
   /* --- Ink --- */
-  --foreground:        #2e1b16;  /* warm near-black brown-ink */
-  --foreground-soft:   #4a3229;
-  --muted:             #8a6f5f;  /* secondary copy */
-  --muted-light:       #a89076;
+  --foreground:        #2f1b47;  /* deep violet-ink, reads near-black */
+  --foreground-soft:   #4a3163;
+  --muted:             #7c6690;  /* muted mauve */
+  --muted-light:       #b6a2c6;
 
-  /* --- Accents from the invitation --- */
-  --accent:            #8e1717;  /* deep kumkum crimson */
-  --accent-deep:       #6b0f0f;
-  --accent-secondary:  #1f3a63;  /* Krishna indigo (from template refs) */
-  --peacock:           #12665f;  /* peacock teal, used sparingly */
+  /* --- Accents --- */
+  --accent:            #6d2c91;  /* royal purple accent */
+  --accent-deep:       #4a1a66;
+  --accent-secondary:  #8e1749;  /* kumkum-rose, from the silk borders */
+  --peacock:           #12665f;
 
   /* --- Metal: antique / temple brass, never #FFD700 --- */
-  --gold:              #a8823c;
-  --gold-light:        #c9a25c;
-  --gold-pale:         #e0cba3;
-  --gold-deep:         #7d5f28;
+  --gold:              #b08d3f;
+  --gold-light:        #d9b569;
+  --gold-pale:         #ecd9ab;
+  --gold-deep:         #85661f;
 
   /* --- Lines --- */
-  --border:            rgba(168, 130, 60, 0.34);
-  --border-strong:     rgba(168, 130, 60, 0.62);
-  --border-ink:        rgba(46, 27, 22, 0.14);
+  --border:            rgba(176, 141, 63, 0.34);
+  --border-strong:     rgba(176, 141, 63, 0.62);
+  --border-ink:        rgba(47, 27, 71, 0.14);
 
   /* --- Type --- */
   --font-display: "Cormorant Garamond", "Cormorant", Didot, "Hoefler Text", Baskerville, Georgia, serif;

@@ -55,34 +55,46 @@ export function initNav() {
   }
 }
 
-/* Brief, skippable opening. Remembers that it has been seen. */
-export function initOverture() {
+/* Sealed-envelope opening.
+ * The seal press is the single user gesture that (a) opens the envelope and
+ * (b) unlocks audio. Nothing plays or moves before it. */
+export function initOverture({ onOpen } = {}) {
   const ov = document.querySelector(".overture");
   if (!ov) return;
 
-  const seen = sessionStorage.getItem("kr-overture") === "seen";
+  const seal = ov.querySelector("#seal");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const seen = sessionStorage.getItem("kr-opened") === "yes";
 
-  if (seen || reduce) {
-    ov.remove();
-    document.body.style.overflow = "";
-    return;
-  }
-
-  document.body.style.overflow = "hidden";
-
-  const dismiss = () => {
-    if (ov.classList.contains("is-done")) return;
+  const release = () => {
     ov.classList.add("is-done");
     document.body.style.overflow = "";
-    sessionStorage.setItem("kr-overture", "seen");
-    setTimeout(() => ov.remove(), 1200);
+    document.body.classList.add("is-entered");
+    setTimeout(() => ov.remove(), 1300);
   };
 
-  ov.querySelector(".overture__skip")?.addEventListener("click", dismiss);
-  ov.addEventListener("click", dismiss);
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") dismiss(); }, { once: true });
+  // Returning guest in the same session: don't make them open it twice.
+  if (seen) { ov.remove(); document.body.style.overflow = ""; document.body.classList.add("is-entered"); return; }
 
-  // Auto-continue — short by design
-  setTimeout(dismiss, 3400);
+  document.body.style.overflow = "hidden";
+  seal?.focus({ preventScroll: true });
+
+  let opening = false;
+  const open = () => {
+    if (opening) return;
+    opening = true;
+    sessionStorage.setItem("kr-opened", "yes");
+
+    onOpen?.();                       // start the music from this gesture
+
+    if (reduce) return release();     // no choreography, just enter
+
+    ov.classList.add("is-opening");   // flaps unfold, card rises
+    setTimeout(release, 1900);        // let the card be seen before we hand over
+  };
+
+  seal?.addEventListener("click", open);
+  ov.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+  });
 }

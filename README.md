@@ -49,7 +49,7 @@ To deploy, upload the contents of `public/` to any static host
 > it loads instantly over mobile data from a WhatsApp link, which is how most
 > guests will open it, and it needs no build step on Vercel.
 
-`vibe-match-assets/` (the design references) is git-ignored — it is ~32 MB of
+`vibe-match-assets/` and `example-pages/` (the design references) are git-ignored — it is ~32 MB of
 source inspiration that never gets served. It stays on your machine.
 
 ## Structure
@@ -79,12 +79,22 @@ All wording, dates, names, events and photos live in
 `public/scripts/wedding-data.js` and `public/index.html`.
 Text is taken verbatim from `assets/patrika.md`.
 
+## Interactions
+
+| Where | What |
+|---|---|
+| Opening | A sealed purple envelope. Pressing the gold wax seal unfolds all four flaps, lifts the invitation card out, and starts the music. Skipped for returning visitors in the same session and for reduced-motion. |
+| Music | `public/audio/theme.mp3`. **Never autoplays.** Starts only from the seal press, fades 0 → 0.34 over ~5s so it arrives under the reveal. Persistent mute button, bottom-right. Ducks to silence when the tab is hidden. |
+| Srirangam | The Rajagopuram gets a scroll-linked cinematic push-in (scale 1.28 → 1.02, always ≥ 1 so no edges show). Placed here because the groom's lineage in the Patrika is ஸ்ரீரங்கம். |
+| Save the Date | A real canvas gold-foil scratch card. Clears itself past ~55%. A "Reveal instead" button gives the same result for keyboard/AT users, and the text underneath is always real DOM. |
+| Gallery | Scrapbook layout — photos on white mounts, tilted at authored angles with washi tape. Tilts are fixed per slot, not random, so the composition is identical every visit. |
+
 ## Design system
 
 Derived from `vibe-match-assets/` — the couple's own invitation references.
 
-- **Ground** aged parchment `#f6efe1`, deep crimson-black `#2a1410` for sacred sections
-- **Accent** kumkum crimson `#8e1717`
+- **Ground** warm ivory `#f7f2ea`, royal purple `#2b1145` for the cinematic sections
+- **Accent** royal purple `#6d2c91`, kumkum-rose `#8e1749`
 - **Metal** antique/temple brass `#a8823c` (never a bright yellow gold)
 - **Type** Cormorant Garamond (display) · Marcellus (body) · Jost (eyebrows)
   · Noto Serif Tamil / Devanagari, each with local macOS fallbacks

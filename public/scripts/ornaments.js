@@ -19,6 +19,20 @@ export const ORN = {
   </g>
 </svg>`,
 
+  /* Symmetrical flowering vine — drawn across the envelope's top flap */
+  vine: `
+<svg class="orn orn--vine" viewBox="0 0 200 70" fill="none" aria-hidden="true" focusable="false">
+  <g stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none">
+    <path d="M100 68V22"/>
+    <path d="M100 56c-10-2-16-8-18-17 9 1 15 6 18 14M100 56c10-2 16-8 18-17-9 1-15 6-18 14"/>
+    <path d="M100 40c-8-1.6-13-6.4-14.6-13.6 7.4.8 12.4 5 14.6 11.4M100 40c8-1.6 13-6.4 14.6-13.6-7.4.8-12.4 5-14.6 11.4"/>
+    <circle cx="100" cy="18" r="4.6"/><circle cx="100" cy="18" r="1.6"/>
+    <path d="M86 62c-14 0-24-6-28-16 12-1 22 4 27 12M114 62c14 0 24-6 28-16-12-1-22 4-27 12"/>
+    <circle cx="60" cy="44" r="3.2"/><circle cx="140" cy="44" r="3.2"/>
+    <circle cx="42" cy="52" r="2.2"/><circle cx="158" cy="52" r="2.2"/>
+  </g>
+</svg>`,
+
   /* Small lotus bud used as an inline flourish */
   bud: `
 <svg class="orn orn--bud" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">

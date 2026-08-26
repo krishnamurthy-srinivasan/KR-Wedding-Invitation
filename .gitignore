@@ -6,3 +6,6 @@ node_modules/
 # Design reference material — source inspiration only, never served.
 # Keep these locally; they add ~32 MB and Vercel does not need them.
 vibe-match-assets/
+
+# Source material for the new interactions — not served
+example-pages/
