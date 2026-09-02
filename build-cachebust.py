@@ -44,18 +44,19 @@ for css in sorted((ROOT / "styles").glob("*.css")):
         css.write_text(src, encoding="utf-8")
         changed.append(css.name)
 
-# 3. Top-level references in index.html (hash them LAST, after their contents settled)
-html_path = ROOT / "index.html"
-html = strip(html_path.read_text(encoding="utf-8"))
+# 3. Top-level references in EVERY page (hash them LAST, once contents settled)
 def fixh(m):
     attr, path = m.group(1), m.group(2)
     d = digest(path)
     return m.group(0) if d is None else f'{attr}="{path}?v={d}"'
-html = re.sub(r'(href)="(styles/[^"?]+\.css)"', fixh, html)
-html = re.sub(r'(src)="(scripts/[^"?]+\.js)"', fixh, html)
-html_path.write_text(html, encoding="utf-8")
 
-print("stamped:", ", ".join(changed) if changed else "(no inner imports changed)")
-for line in html.split("\n"):
-    if "?v=" in line:
-        print("  ", line.strip())
+print("stamped modules:", ", ".join(changed) if changed else "(none changed)")
+for html_path in sorted(ROOT.glob("*.html")):
+    html = strip(html_path.read_text(encoding="utf-8"))
+    html = re.sub(r'(href)="(styles/[^"?]+\.css)"', fixh, html)
+    html = re.sub(r'(src)="(scripts/[^"?]+\.js)"', fixh, html)
+    html_path.write_text(html, encoding="utf-8")
+    print(f"  {html_path.name}:")
+    for line in html.split("\n"):
+        if "?v=" in line:
+            print("     ", line.strip())

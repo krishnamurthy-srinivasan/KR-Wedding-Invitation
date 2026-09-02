@@ -954,9 +954,36 @@
 [data-theme="dark"] .gopuram__figure {
   background: linear-gradient(150deg, rgba(217,181,105,0.14), transparent 55%);
 }
-[data-theme="dark"] .venue__qr { background: var(--paper-warm); }
-[data-theme="dark"] .venue__qr img { filter: invert(1) hue-rotate(180deg) brightness(1.6); }
+/* A QR has to scan, so it always sits on a light plate, never inverted. */
+[data-theme="dark"] .venue__qr { background: #f6f2ea; border-color: var(--gold); }
+[data-theme="dark"] .venue__qr img { filter: none; }
+[data-theme="dark"] .venue__qr figcaption { color: #6a5836; }
 [data-theme="dark"] .shot button { background: var(--paper-warm); }
 [data-theme="dark"] .scratch { background: linear-gradient(165deg, #3d2069, #2c1450); }
 [data-theme="dark"] .patrika__card { background: var(--paper-warm); }
 [data-theme="dark"] .nav { background: color-mix(in srgb, var(--background) 84%, transparent); }
+
+/* ======================= EDITION EXTRAS ======================= */
+.blessing__guru {
+  max-width: 52ch; margin-inline: auto;
+  font-size: var(--step--1); line-height: 1.95;
+  color: var(--muted); letter-spacing: 0.02em;
+}
+.footer__addr {
+  margin-top: 0.9rem; font-style: normal;
+  font-size: var(--step--1); line-height: 1.9; color: var(--muted);
+}
+.footer__also {
+  margin-top: 0.6rem; font-family: var(--font-display); font-style: italic;
+  font-size: var(--step-0); color: var(--gold-light);
+}
+.footer__switch {
+  display: inline-block; margin-left: 1rem;
+  font-family: var(--font-sans); font-size: 0.68rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold-light);
+  border-bottom: 1px solid transparent; padding: 0.3rem 0;
+}
+.footer__switch:hover, .footer__switch:focus-visible { border-bottom-color: currentColor; }
+@media (max-width: 520px) {
+  .footer__switch { display: block; margin: 0.9rem auto 0; }
+}

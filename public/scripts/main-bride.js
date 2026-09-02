@@ -1,16 +1,17 @@
-import { WEDDING } from "./wedding-data.js?v=9d18bcc2";
+/* Bride's edition entry point. Same machinery as the groom's page, but reads
+   wedding-data-bride.js and has no envelope (the gate already handled that). */
+import { WEDDING } from "./wedding-data-bride.js?v=c7514847";
 import { ORN, mountCorners } from "./ornaments.js?v=f828ce9b";
 import { initReveals, prepareDrawings, initParallax, initAmbient } from "./motion.js?v=f977ae37";
 import { initCountdown } from "./countdown.js?v=1f1955cd";
 import { initLightbox } from "./lightbox.js?v=010ac977";
-import { initNav, initOverture } from "./nav.js?v=b9be22ac";
+import { initNav } from "./nav.js?v=b9be22ac";
 import { initAudio } from "./audio.js?v=2951ae48";
 import { initScratch } from "./scratch.js?v=d59d69f4";
 import { initGopuram } from "./gopuram.js?v=3fce13d0";
 import { burst } from "./confetti.js?v=2b8b70a9";
 import { initTheme } from "./theme.js?v=5dc7a2b3";
 
-/* ---------- Fill in ornament placeholders ---------- */
 function mountOrnaments() {
   document.querySelectorAll("[data-orn]").forEach((slot) => {
     const key = slot.dataset.orn;
@@ -19,11 +20,9 @@ function mountOrnaments() {
   document.querySelectorAll("[data-corners]").forEach(mountCorners);
 }
 
-/* ---------- Events timeline ---------- */
 function buildEvents() {
   const host = document.querySelector(".events__list");
   if (!host) return;
-
   host.innerHTML = WEDDING.events
     .map(
       (day, di) => `
@@ -53,24 +52,19 @@ function buildEvents() {
     .join("");
 }
 
-/* ---------- Gallery: scrapbook ----------
-   Photographs are pinned at deliberate angles like a keepsake album.
-   The tilts/offsets are authored per-slot (not random) so the composition
-   is the same every visit and can be tuned by eye. */
 const SCRAP = [
-  { rot: -2.4, tape: "tl", lift: 0    },
-  { rot:  1.6, tape: "tr", lift: 3.5  },
-  { rot:  2.6, tape: "tl", lift: -2   },
-  { rot: -1.8, tape: "tr", lift: 4.5  },
-  { rot:  1.9, tape: "tl", lift: 1    },
-  { rot: -2.8, tape: "tr", lift: -3   },
+  { rot: -2.4, tape: "tl", lift: 0 },
+  { rot: 1.6, tape: "tr", lift: 3.5 },
+  { rot: 2.6, tape: "tl", lift: -2 },
+  { rot: -1.8, tape: "tr", lift: 4.5 },
+  { rot: 1.9, tape: "tl", lift: 1 },
+  { rot: -2.8, tape: "tr", lift: -3 },
 ];
 
 function buildGallery() {
   const grid = document.querySelector(".gallery__grid");
   if (!grid) return;
   const slots = ["a", "b", "c", "d", "e", "f"];
-
   grid.innerHTML = WEDDING.gallery
     .map((shot, i) => {
       const s = SCRAP[i % SCRAP.length];
@@ -87,7 +81,6 @@ function buildGallery() {
     .join("");
 }
 
-/* ---------- Venue links ---------- */
 function wireVenue() {
   const q = encodeURIComponent(WEDDING.venue.mapsQuery);
   document.querySelectorAll("[data-maps]").forEach((a) => {
@@ -95,7 +88,6 @@ function wireVenue() {
   });
 }
 
-/* ---------- Boot ---------- */
 function boot() {
   initTheme();
   mountOrnaments();
@@ -103,13 +95,13 @@ function boot() {
   buildGallery();
   wireVenue();
 
-  // The gate (index.html) already took the user's gesture, so the control is
-  // available immediately. Nothing plays until they press it.
-  initAudio();
+  const audio = initAudio();
+  // The gate already took the user's gesture, so the control is available
+  // immediately — but nothing plays until they press it.
   const mt = document.querySelector("#music-toggle");
   if (mt) { mt.hidden = false; requestAnimationFrame(() => mt.classList.add("is-in")); }
-  initNav();
 
+  initNav();
   prepareDrawings();
   initReveals();
   initParallax();
@@ -117,14 +109,15 @@ function boot() {
 
   initCountdown(document.querySelector(".countdown"), WEDDING.date.muhurthamStartISO);
   initLightbox(document.querySelector(".gallery"));
+
   const scratchCard = document.querySelector(".scratch-card");
   initScratch(scratchCard);
   scratchCard?.addEventListener("scratch:done", () => {
     const card = scratchCard.querySelector(".scratch");
     if (card) burst(card);
   });
-  initGopuram(document.querySelector(".gopuram"));
 
+  initGopuram(document.querySelector(".gopuram"));
   document.documentElement.classList.add("is-ready");
 }
 

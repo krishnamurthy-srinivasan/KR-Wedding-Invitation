@@ -99,12 +99,41 @@ All wording, dates, names, events and photos live in
 `public/scripts/wedding-data.js` and `public/index.html`.
 Text is taken verbatim from `assets/patrika.md`.
 
+## Two editions
+
+Each family printed its own Patrika, and the two differ, so each side gets its
+own invitation rather than a compromise between them.
+
+| | Groom's edition | Bride's edition |
+|---|---|---|
+| Page | `groom.html` | `bride.html` |
+| Theme | Royal purple | Sky blue (deep sky blue in dark) |
+| Names | Krishnamurthy first | Roshini first |
+| Muhurtham | 5:30 – 7:20 a.m. | **6:00 – 7:20 a.m.** |
+| Reception | 6:00 p.m. | 6:30 p.m. |
+| Also | — | Viratham 7:30 a.m., Nichayathartham 10:30 a.m. |
+| Tradition | Sri Kalyana Venkataramana, Uttaradi Matha | Sri Maha Ganapathi, Kanchi Kamakoti Peetam |
+| Hosts | Kousalya & Gopinathan | Gayathri & Ravishankar |
+| Patrika | `patrika/patrika.pdf` | `patrika/patrika-bride.pdf` |
+
+**The timings genuinely differ between the two printed cards.** Neither is a
+typo on our side: each edition reproduces its own family's card. If the
+families later agree one is wrong, fix it in
+`scripts/wedding-data.js` (groom) or `scripts/wedding-data-bride.js` (bride),
+and in the corresponding `*.html`.
+
+`index.html` is the gate: the sealed envelope, then the bride/groom chooser
+over the Radha-Krishna artwork. The chosen side is remembered in
+`localStorage`, so a returning guest goes straight to their own invitation.
+`index.html?choose=1` forces the chooser again, and every footer has a
+"Change side" link.
+
 ## Interactions
 
 | Where | What |
 |---|---|
 | Theme | Dark / light toggle, bottom-right. **Dark is the default.** In dark mode the ivory bands become light royal purple. Applied by an inline script before first paint, so there is no flash; the choice is remembered in `localStorage`. |
-| Opening | A sealed purple envelope. Pressing the gold wax seal unfolds all four flaps, lifts the invitation card out, and starts the music. Skipped for returning visitors in the same session and for reduced-motion. |
+| Opening | A sealed envelope on `index.html`. Pressing the gold wax seal unfolds all four flaps, starts the music, and reveals the side chooser. Skipped for returning visitors in the same session and for reduced-motion. |
 | Music | `public/audio/theme.mp3`. **Never autoplays.** Starts only from the seal press, fades 0 → 0.34 over ~5s so it arrives under the reveal. Persistent mute button, bottom-right. Ducks to silence when the tab is hidden. |
 | Srirangam | The Rajagopuram eases OUT as you scroll (scale 1.34 → 1.00) via a native CSS `animation-timeline: view()`, with a rAF fallback. Placed here because the groom's lineage in the Patrika is ஸ்ரீரங்கம். |
 | Save the Date | A real canvas gold-foil scratch card. Clears itself past ~55%. A "Reveal instead" button gives the same result for keyboard/AT users, and the text underneath is always real DOM. |

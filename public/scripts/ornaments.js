@@ -100,6 +100,19 @@ export const ORN = {
   </g>
 </svg>`,
 
+  /* Kuthuvilakku (standing oil lamp) — reception / evening events */
+  lamp: `
+<svg class="orn-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
+  <g stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <path class="d" d="M24 4c-2 2.6-3 4.6-3 6.2 0 1.9 1.3 3.2 3 3.2s3-1.3 3-3.2C27 8.6 26 6.6 24 4z"/>
+    <path class="d" d="M15 16h18l-2.4 4H17.4L15 16z"/>
+    <path class="d" d="M24 20v14"/>
+    <path class="d" d="M19 27h10" opacity="0.6"/>
+    <path class="d" d="M13 42c0-4.4 5-7.6 11-7.6S35 37.6 35 42H13z"/>
+    <path class="d" d="M9 44h30" />
+  </g>
+</svg>`,
+
   /* Banana / betel leaf (dinner) */
   leaf: `
 <svg class="orn-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">

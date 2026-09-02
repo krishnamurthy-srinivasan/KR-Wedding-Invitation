@@ -23,14 +23,18 @@ export function initScratch(root) {
     canvas.height = Math.round(r.height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // brushed antique gold
+    // Brushed antique gold. Read the live token so each edition's foil
+    // matches its own palette.
+    const cs = getComputedStyle(document.documentElement);
+    const warm = (cs.getPropertyValue("--gold-light").trim() || "#e6cd93");
+    const deep = (cs.getPropertyValue("--gold-deep").trim() || "#8a6a26");
     const g = ctx.createLinearGradient(0, 0, r.width, r.height);
-    g.addColorStop(0.00, "#c9a961");
-    g.addColorStop(0.22, "#e6cd93");
-    g.addColorStop(0.42, "#a8823c");
-    g.addColorStop(0.63, "#e9d5a3");
-    g.addColorStop(0.82, "#b08d3f");
-    g.addColorStop(1.00, "#8a6a26");
+    g.addColorStop(0.00, deep);
+    g.addColorStop(0.22, warm);
+    g.addColorStop(0.42, deep);
+    g.addColorStop(0.63, warm);
+    g.addColorStop(0.82, deep);
+    g.addColorStop(1.00, deep);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, r.width, r.height);
 
