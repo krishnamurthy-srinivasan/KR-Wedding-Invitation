@@ -124,11 +124,12 @@ families later agree one is wrong, fix it in
 and in the corresponding `*.html`.
 
 `index.html` is the gate: the sealed envelope, then the bride/groom chooser
-over a full-screen landscape film of Krishna's and Radha's hands
-(`video/chooser.mp4`). The film carries its own painted "BRIDE SIDE" and
-"GROOM SIDE" plates, but they drift as the shot pushes in, so they cannot be
-used as buttons; two corner washes fade them out and our own plates sit in the
-clear lower centre. The chosen side is remembered in
+over `photos/radhekrishna.jpg`, full-screen and landscape. That painting is a
+diptych, Radha's eye on the left and Krishna's on the right with their hands
+clasped at the seam, so each side's button sits beneath its own half. Gold
+sparkles drift over it from a single canvas (`scripts/sparkle.js`), and
+choosing a side plays a curtain wipe that parts along that centre seam before
+the page loads. The chosen side is remembered in
 `localStorage`, so a returning guest goes straight to their own invitation.
 `index.html?choose=1` forces the chooser again, and every footer has a
 "Change side" link.

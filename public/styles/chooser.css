@@ -1,41 +1,34 @@
 /* ============================================================
    The gate's side chooser.
 
-   The film (772x434, 16:9) already contains the two engraved plates, so on
-   wide screens the links are positioned directly over them and the artwork
-   itself becomes the interface. The film is letterboxed rather than cropped,
-   so nothing is ever cut off. Below 820px the painted plates are too small to
-   tap, so the picks become their own stacked plates beneath the film.
+   The painting is a diptych: Radha's eye on the left, Krishna's on the right,
+   their hands clasped at the centre seam. So each side's button simply sits
+   beneath its own half, and the exit wipe parts along that same seam.
    ============================================================ */
+
+:root { --gate-bg: #0b0716; --gate-glow: #2a1147; }
 
 body.gate { overflow: hidden; }
 
 .chooser {
   position: relative;
   min-height: 100svh;
-  display: grid;
-  place-items: center;
+  display: grid; place-items: center;
   overflow: hidden;
   background: var(--gate-bg);
-  opacity: 1;                       /* visible by default: a failed
-                                       transition must never blank the page */
+  opacity: 1;                     /* visible by default: a failed transition
+                                     must never leave the page blank */
   transition: opacity 1.2s var(--ease-out);
 }
 .chooser.is-fading { opacity: 0; }
 .chooser.is-fading.is-in { opacity: 1; }
 .chooser[hidden] { display: none; }
 
-/* A royal sea blue ground for the letterbox margins. */
-:root { --gate-bg: #071b3a; --gate-glow: #0d3f7a; }
-
 .chooser::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 45%, var(--gate-glow), transparent 70%),
-    linear-gradient(to bottom, #04122a, var(--gate-bg) 45%, #04122a);
+  background: radial-gradient(ellipse 72% 58% at 50% 46%, var(--gate-glow), transparent 72%);
 }
 
-/* ---- the stage holds the film and everything pinned to it ---- */
 .chooser__stage {
   position: relative;
   width: 100%; height: 100svh;
@@ -43,214 +36,280 @@ body.gate { overflow: hidden; }
   background: var(--gate-bg);
 }
 
-.chooser__film,
-.chooser__still {
+/* ---- the painting ---- */
+.chooser__art {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: 50% 50%;
+  object-fit: cover; object-position: 50% 42%;
   display: block;
-  background: var(--gate-bg);   /* never let the UA's white show through */
-  /* A gentle push-in keeps the plates further out of frame and adds depth. */
-  transform: scale(1.06);
 }
-/* The still is the fallback: shown only if the film cannot play. */
-.chooser__still { z-index: 0; }
-.chooser__film  { z-index: 1; }
-.chooser.no-film .chooser__film { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .chooser.is-in .chooser__art { animation: art-breathe 30s var(--ease-soft) infinite alternate; }
+}
+@keyframes art-breathe {
+  from { transform: scale(1.04); }
+  to   { transform: scale(1.11); }
+}
 
-/* Light touch only: the artwork should stay bright and legible. */
-/* The film carries its own painted "BRIDE SIDE" / "GROOM SIDE" plates, and
-   they drift as the shot pushes in, so they cannot be used as buttons. These
-   corner washes fade them out; our own plates sit in the clear centre. */
+/* ---- sparkles over the painting ---- */
+.chooser__sparks {
+  position: absolute; inset: 0; z-index: 2;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Keep the eyes readable and give the type something to sit on. */
 .chooser__veil {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background:
-    /* cover the painted plate, upper-left */
-    radial-gradient(ellipse 46% 34% at 14% 20%,
-      rgba(5, 20, 44, 0.99) 0%, rgba(5, 20, 44, 0.96) 40%, rgba(5,20,44,0.55) 66%, transparent 82%),
-    /* cover the painted plate, lower-right */
-    radial-gradient(ellipse 46% 34% at 86% 80%,
-      rgba(5, 20, 44, 0.99) 0%, rgba(5, 20, 44, 0.96) 40%, rgba(5,20,44,0.55) 66%, transparent 82%),
-    /* soften the frame edges into the ground */
-    linear-gradient(to bottom, rgba(4, 16, 36, 0.72) 0%, transparent 20%,
-                    transparent 50%, rgba(4, 16, 36, 0.88) 90%, rgba(4,16,36,0.96) 100%),
-    linear-gradient(to right, rgba(4, 16, 36, 0.72), transparent 16%,
-                    transparent 84%, rgba(4, 16, 36, 0.72));
+    radial-gradient(ellipse 46% 34% at 50% 40%, rgba(8, 5, 20, 0.62), transparent 74%),
+    linear-gradient(to bottom, rgba(8, 5, 20, 0.52) 0%, transparent 24%,
+                    transparent 44%, rgba(8, 5, 20, 0.82) 84%, rgba(8, 5, 20, 0.94) 100%);
 }
 
-/* ---- the couple's names, centred in the film ---- */
+/* ---- names ---- */
 .chooser__hud {
   position: absolute; z-index: 4;
-  max-width: 100%;
-  left: 50%; top: 34%; transform: translate(-50%, -50%);
-  width: min(90%, 680px);
-  display: grid; justify-items: center; gap: 0.3rem;
-  text-align: center;
-  pointer-events: none;
+  left: 50%; top: 30%; transform: translate(-50%, -50%);
+  width: min(92%, 700px); max-width: 100%;
+  display: grid; justify-items: center; gap: 0.55rem;
+  text-align: center; pointer-events: none;
 }
-.chooser__om {
-  font-family: var(--font-tamil); font-size: clamp(0.85rem, 1.5vw, 1.15rem);
-  color: #f2dda6; text-shadow: 0 2px 16px rgba(2, 8, 22, 0.98);
+.chooser__shri {
+  width: clamp(46px, 6.5vw, 74px); height: auto;
+  filter: drop-shadow(0 2px 14px rgba(8, 5, 20, 0.95));
 }
 .chooser__names {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(1.35rem, 3.1vw, 3rem);
+  font-size: clamp(1.3rem, 3.2vw, 3rem);
   line-height: 1.12; color: #fffaf1;
-  text-shadow: 0 2px 26px rgba(2, 8, 22, 1), 0 0 60px rgba(2, 8, 22, 0.9);
+  text-shadow: 0 2px 28px rgba(8, 5, 20, 1), 0 0 70px rgba(8, 5, 20, 0.95);
 }
-.chooser__names .script-amp { color: #f2dda6; margin-inline: 0.1em; }
+.chooser__names .script-amp { color: #f0d69b; margin-inline: 0.1em; }
 .chooser__date {
-  font-family: var(--font-sans); font-size: clamp(0.56rem, 0.9vw, 0.8rem);
-  letter-spacing: 0.46em; text-indent: 0.46em; color: #f2dda6;
-  text-shadow: 0 2px 14px rgba(2, 8, 22, 1);
+  font-family: var(--font-sans); font-size: clamp(0.55rem, 0.9vw, 0.8rem);
+  letter-spacing: 0.46em; text-indent: 0.46em; color: #f0d69b;
+  text-shadow: 0 2px 14px rgba(8, 5, 20, 1);
 }
 
 .chooser__note {
   position: absolute; z-index: 4;
   left: 50%; bottom: 5%; transform: translateX(-50%);
   font-family: var(--font-display); font-style: italic;
-  font-size: clamp(0.78rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.76rem, 1.35vw, 1.08rem);
   color: rgba(250, 244, 232, 0.9);
-  text-shadow: 0 2px 20px rgba(2, 8, 22, 1);
+  text-shadow: 0 2px 20px rgba(8, 5, 20, 1);
   white-space: nowrap;
 }
 
-/* ---- the picks ---- */
-.pick { display: grid; justify-items: center; gap: 0.4rem; text-decoration: none; }
+/* ======================= THE ROYAL BUTTONS ======================= */
+.pick {
+  display: grid; justify-items: center; gap: 0.55rem;
+  text-decoration: none;
+  transition: transform .55s var(--ease-out);
+}
+
 .pick__plate {
   position: relative; overflow: hidden;
-  display: grid; justify-items: center; gap: 0.15rem;
-  transition: box-shadow .55s var(--ease-out), border-color .55s var(--ease-out),
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+  gap: clamp(0.5rem, 1.4vw, 1rem);
+  padding: clamp(0.7rem, 1.5vw, 1rem) clamp(0.9rem, 2.2vw, 1.5rem);
+  /* deep lacquer under gold */
+  background:
+    linear-gradient(160deg, rgba(58, 44, 20, 0.94), rgba(26, 19, 8, 0.97));
+  border: 1px solid #c9a95e;
+  box-shadow:
+    0 22px 50px -20px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 242, 208, 0.38),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 0 4px rgba(201, 169, 94, 0.16);
+  /* clipped corners, like an engraved plaque */
+  clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px,
+    100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%,
+    0 calc(100% - 14px), 0 14px);
+  transition: border-color .55s var(--ease-out), box-shadow .55s var(--ease-out),
               background .55s var(--ease-out);
 }
+
+/* a slow sheen that sweeps across on hover */
 .pick__plate::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(105deg, transparent 38%,
-              rgba(255, 244, 214, 0.34) 50%, transparent 62%);
+              rgba(255, 246, 218, 0.38) 50%, transparent 62%);
   transform: translateX(-130%);
   transition: transform .95s var(--ease-out);
 }
 .pick:hover .pick__plate::after,
 .pick:focus-visible .pick__plate::after { transform: translateX(130%); }
 
+/* small filigree diamonds either side of the label */
+.pick__orn {
+  width: 11px; height: 11px; flex: none;
+  border: 1px solid rgba(240, 214, 155, 0.85);
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 0 2px rgba(240, 214, 155, 0.25);
+}
+.pick__text { display: grid; justify-items: center; gap: 0.18rem; }
+
 .pick__label {
   font-family: var(--font-display); font-weight: 400;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: #f7e6b4; white-space: nowrap;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: #f9ecc4; white-space: nowrap;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
 }
 .pick__sub {
   font-family: var(--font-sans); letter-spacing: 0.3em; text-transform: uppercase;
-  color: rgba(246, 232, 198, 0.85);
+  color: rgba(246, 232, 198, 0.82);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
 }
 .pick__hint {
   font-family: var(--font-sans); letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(248, 240, 226, 0.82); white-space: nowrap;
-  text-shadow: 0 1px 12px rgba(2, 8, 22, 1);
+  color: rgba(248, 240, 226, 0.8); white-space: nowrap;
+  text-shadow: 0 1px 12px rgba(8, 5, 20, 1);
 }
-.pick:focus-visible { outline: 2px solid #f2dda6; outline-offset: 6px; }
+
+.pick:hover, .pick:focus-visible { transform: translateY(-7px); }
+.pick:active { transform: translateY(-2px) scale(0.99); }
+.pick:hover .pick__plate, .pick:focus-visible .pick__plate {
+  border-color: #f4e2ab;
+  background: linear-gradient(160deg, rgba(74, 56, 24, 0.96), rgba(34, 25, 10, 0.98));
+  box-shadow:
+    0 30px 62px -20px rgba(0, 0, 0, 0.98),
+    inset 0 1px 0 rgba(255, 248, 224, 0.5),
+    inset 0 0 0 4px rgba(244, 226, 171, 0.3),
+    0 0 34px -6px rgba(240, 214, 155, 0.45);
+}
+.pick:focus-visible { outline: 2px solid #f0d69b; outline-offset: 7px; }
 .pick:focus:not(:focus-visible) { outline: none; }
 
-/* ================= WIDE ================= */
-@media (min-width: 820px) {
-  .chooser__picks {
-    position: absolute; z-index: 5;
-    left: 50%; bottom: 12%; transform: translateX(-50%);
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: clamp(1.25rem, 3.5vw, 2.75rem);
-    width: min(88vw, 720px);
-  }
-  .pick { transition: transform .55s var(--ease-out); }
-  .pick__plate {
-    width: 100%; min-height: 68px; align-content: center;
-    padding: 0.85rem 1.5rem;
-    background: linear-gradient(150deg, rgba(46, 36, 18, 0.92), rgba(22, 17, 8, 0.95));
-    border: 1px solid #c9a95e;
-    box-shadow: 0 20px 46px -18px rgba(0, 0, 0, 0.95),
-                inset 0 1px 0 rgba(255, 240, 200, 0.32),
-                inset 0 0 0 4px rgba(201, 169, 94, 0.16);
-    clip-path: polygon(13px 0, calc(100% - 13px) 0, 100% 13px,
-      100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%,
-      0 calc(100% - 13px), 0 13px);
-  }
-  .pick__label { font-size: clamp(1.05rem, 1.7vw, 1.5rem); }
-  .pick__sub   { font-size: clamp(0.52rem, 0.72vw, 0.64rem); }
-  .pick__hint  { font-size: clamp(0.5rem, 0.7vw, 0.62rem); }
-  .pick:hover, .pick:focus-visible { transform: translateY(-6px); }
-  .pick:hover .pick__plate, .pick:focus-visible .pick__plate {
-    border-color: #f0d69b;
-    box-shadow: 0 28px 58px -18px rgba(0, 0, 0, 0.98),
-                inset 0 1px 0 rgba(255, 244, 214, 0.45),
-                inset 0 0 0 4px rgba(240, 214, 155, 0.26);
-  }
+/* Each button tinted faintly toward its own half of the painting. */
+.pick--bride:hover .pick__plate, .pick--bride:focus-visible .pick__plate {
+  box-shadow:
+    0 30px 62px -20px rgba(0, 0, 0, 0.98),
+    inset 0 1px 0 rgba(255, 248, 224, 0.5),
+    inset 0 0 0 4px rgba(244, 226, 171, 0.3),
+    0 0 36px -6px rgba(226, 150, 90, 0.55);
+}
+.pick--groom:hover .pick__plate, .pick--groom:focus-visible .pick__plate {
+  box-shadow:
+    0 30px 62px -20px rgba(0, 0, 0, 0.98),
+    inset 0 1px 0 rgba(255, 248, 224, 0.5),
+    inset 0 0 0 4px rgba(244, 226, 171, 0.3),
+    0 0 36px -6px rgba(90, 160, 226, 0.55);
 }
 
-/* ================= NARROW: stack real plates under the film ================= */
-@media (max-width: 819px) {
+/* ================= WIDE: one button under each half ================= */
+@media (min-width: 760px) {
+  .chooser__picks {
+    position: absolute; z-index: 5;
+    left: 0; right: 0; bottom: 13%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: start;
+    padding-inline: clamp(1.5rem, 7vw, 6rem);
+    gap: clamp(1.5rem, 6vw, 5rem);
+  }
+  .pick__label { font-size: clamp(1rem, 1.6vw, 1.45rem); }
+  .pick__sub   { font-size: clamp(0.5rem, 0.7vw, 0.62rem); }
+  .pick__hint  { font-size: clamp(0.48rem, 0.68vw, 0.6rem); }
+  .pick__plate { width: min(100%, 330px); justify-self: center; }
+}
+
+/* ================= NARROW: stack beneath the painting ================= */
+@media (max-width: 759px) {
   .chooser { place-items: start center; }
   .chooser__stage {
-    width: 100%; height: auto; min-height: 100svh;
-    display: grid; grid-template-rows: auto auto auto auto 1fr;
+    height: auto; min-height: 100svh;
+    display: grid; grid-template-rows: auto auto auto 1fr;
     align-content: start;
-    background: var(--gate-bg);
   }
-  .chooser__film {
+  .chooser__art {
     position: relative; inset: auto;
-    width: 100%; height: auto; aspect-ratio: 772 / 434;
-    transform: none;
+    width: 100%; height: auto; aspect-ratio: 1587 / 806;
   }
-  /* the still stays stacked behind the film, never beside it */
-  .chooser__still {
-    position: absolute; inset: 0 0 auto;
-    width: 100%; height: auto; aspect-ratio: 772 / 434;
-    transform: none;
+  .chooser__sparks, .chooser__veil {
+    inset: 0 0 auto; height: auto; aspect-ratio: 1587 / 806;
   }
-  .chooser__veil { inset: 0 0 auto; aspect-ratio: 772 / 434; }
+  /* the picks and note sit on the solid ground, not over the canvas */
+  .chooser__hud, .chooser__picks, .chooser__note { z-index: 6; }
 
   .chooser__hud {
-    top: auto; bottom: auto; z-index: 4;
-    position: relative; left: auto; transform: none;
+    position: relative; left: auto; top: auto; transform: none;
     width: 100%; padding: clamp(1.1rem, 4vw, 1.8rem) 1rem 0;
-    grid-row: 2;
   }
   .chooser__names { font-size: clamp(1.25rem, 5.4vw, 2rem); }
-  .chooser__om   { font-size: clamp(0.9rem, 3.6vw, 1.1rem); }
-  .chooser__date { font-size: clamp(0.58rem, 2.4vw, 0.72rem); }
+  .chooser__shri  { width: clamp(42px, 12vw, 60px); }
+  .chooser__date  { font-size: clamp(0.56rem, 2.3vw, 0.72rem); }
 
   .chooser__picks {
-    position: relative; grid-row: 3;
+    position: relative;
     display: grid; gap: clamp(0.85rem, 3vw, 1.3rem);
     width: min(100%, 400px);
     margin: clamp(1.2rem, 4vw, 2rem) auto 0;
     padding-inline: 1.25rem;
   }
-  .pick__plate {
-    width: 100%; min-height: 74px; align-content: center;
-    padding: 0.95rem 1.25rem;
-    background: linear-gradient(150deg, rgba(46, 36, 18, 0.94), rgba(24, 18, 9, 0.96));
-    border: 1px solid #a98a45;
-    box-shadow: 0 16px 40px -18px rgba(0, 0, 0, 0.95),
-                inset 0 1px 0 rgba(255, 238, 196, 0.3);
-    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px,
-      100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%,
-      0 calc(100% - 12px), 0 12px);
-  }
-  .pick__label { font-size: clamp(1.05rem, 4.6vw, 1.35rem); }
-  .pick__sub   { font-size: clamp(0.55rem, 2.3vw, 0.66rem); }
-  .pick__hint  { font-size: clamp(0.54rem, 2.2vw, 0.64rem); }
-  .pick:active { transform: scale(0.985); }
+  .pick__plate { width: 100%; min-height: 74px; }
+  .pick__label { font-size: clamp(1.02rem, 4.4vw, 1.3rem); }
+  .pick__sub   { font-size: clamp(0.54rem, 2.2vw, 0.65rem); }
+  .pick__hint  { font-size: clamp(0.53rem, 2.1vw, 0.63rem); }
 
   .chooser__note {
-    position: relative; grid-row: 4;
-    left: auto; bottom: auto; transform: none;
+    position: relative; left: auto; bottom: auto; transform: none;
     margin: clamp(1.2rem, 4vw, 1.8rem) auto clamp(1.5rem, 5vw, 2.5rem);
     white-space: normal; text-align: center; padding-inline: 1.5rem;
   }
 }
 
-/* A still frame is enough when motion is unwelcome. */
+/* ======================= CINEMATIC EXIT =======================
+   The wipe parts from the centre seam, where their hands meet. */
+.curtain {
+  position: fixed; inset: 0; z-index: 250;
+  pointer-events: none;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.curtain__half {
+  position: relative;
+  background: linear-gradient(160deg, #2a1147, #0b0716);
+  transform: scaleX(0);
+  transition: transform 1.05s cubic-bezier(0.72, 0, 0.24, 1);
+}
+.curtain__half--l { transform-origin: left;  }
+.curtain__half--r { transform-origin: right; }
+
+/* a thread of gold along the parting line */
+.curtain__seam {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px; transform: translateX(-50%) scaleY(0);
+  background: linear-gradient(to bottom, transparent, #f0d69b, transparent);
+  box-shadow: 0 0 22px 3px rgba(240, 214, 155, 0.6);
+  transition: transform .55s var(--ease-out);
+}
+
+.curtain.is-closing .curtain__half { transform: scaleX(1); }
+.curtain.is-closing .curtain__seam { transform: translateX(-50%) scaleY(1); }
+
+/* the painting recedes as the curtain closes over it */
+.chooser.is-leaving .chooser__stage {
+  transform: scale(1.06);
+  filter: brightness(0.75);
+  transition: transform 1.05s var(--ease-out), filter 1.05s var(--ease-out);
+}
+.chooser.is-leaving .chooser__hud,
+.chooser.is-leaving .chooser__picks,
+.chooser.is-leaving .chooser__note {
+  opacity: 0;
+  transition: opacity .45s var(--ease-out);
+}
+
+/* Tint the wipe toward the side that was chosen. */
+.chooser[data-leaving="bride"] .curtain__half {
+  background: linear-gradient(160deg, #0c3260, #03142a);
+}
+.chooser[data-leaving="groom"] .curtain__half {
+  background: linear-gradient(160deg, #2b1145, #0b0716);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .chooser__film { display: none; }
+  .curtain { display: none; }
+  .chooser__art { animation: none; }
 }

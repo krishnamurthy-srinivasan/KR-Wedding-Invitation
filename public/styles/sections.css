@@ -26,8 +26,12 @@
   width: min(100%, 460px);
 }
 .overture__om {
-  font-size: var(--step-2); color: var(--gold-light); letter-spacing: 0.06em;
+  display: grid; justify-items: center;
   opacity: 0; animation: ov-in 1.1s var(--ease-out) 0.2s forwards;
+}
+.overture__om img {
+  width: clamp(54px, 13vw, 82px); height: auto;
+  filter: drop-shadow(0 3px 18px rgba(0, 0, 0, 0.65));
 }
 
 /* ---- the envelope ---- */

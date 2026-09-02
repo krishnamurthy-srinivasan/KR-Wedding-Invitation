@@ -8,6 +8,7 @@
 import { ORN, mountCorners } from "./ornaments.js?v=f828ce9b";
 import { initReveals, prepareDrawings, initAmbient } from "./motion.js?v=f977ae37";
 import { initAudio } from "./audio.js?v=3e648893";
+import { initSparkles } from "./sparkle.js?v=7f7a3358";
 import { initTheme } from "./theme.js?v=5dc7a2b3";
 
 const SIDE_KEY = "kr-side";
@@ -39,17 +40,6 @@ function boot() {
     }
   }
 
-  // Hide the poster fallback as soon as the film is actually running.
-  const film = document.querySelector(".chooser__film");
-  const still = document.querySelector(".chooser__still");
-  if (film && still) {
-    const hideStill = () => { still.style.display = "none"; };
-    if (film.readyState >= 2) hideStill();
-    film.addEventListener("playing", hideStill, { once: true });
-    film.addEventListener("loadeddata", hideStill, { once: true });
-    film.addEventListener("error", () => { still.style.display = ""; });
-  }
-
   const overture = document.querySelector(".overture");
   const chooser = document.querySelector(".chooser");
   const seal = document.querySelector("#seal");
@@ -66,19 +56,40 @@ function boot() {
     void chooser.offsetHeight;          // register the pre-transition state
     chooser.classList.add("is-in");
 
+    initSparkles(chooser.querySelector(".chooser__sparks"));
     initReveals();
   };
 
-  // Remember the side, and pass the music baton to the invitation page.
-  document.querySelectorAll("[href$='.html']").forEach((a) => {
-    a.addEventListener("click", () => {
-      const side = a.getAttribute("href").replace(".html", "");
+  /* Cinematic exit: the painting is a diptych, so the curtain parts from the
+     centre seam where their hands meet, then the chosen page loads. */
+  const leaveTo = (href, side) => {
+    const curtain = chooser.querySelector(".curtain");
+    if (!curtain || reduce) { location.href = href; return; }
+
+    chooser.classList.add("is-leaving");
+    chooser.dataset.leaving = side;      // tints the wipe to that side's colour
+    curtain.classList.add("is-closing");
+
+    // Navigate as the wipe completes; the fallback guarantees we never stall.
+    let gone = false;
+    const go = () => { if (!gone) { gone = true; location.href = href; } };
+    curtain.addEventListener("transitionend", go, { once: true });
+    setTimeout(go, 1250);
+  };
+
+  // Remember the side, hand the music baton over, then play the exit wipe.
+  document.querySelectorAll(".pick").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const href = a.getAttribute("href");
+      const side = a.dataset.side || href.replace(".html", "");
       try {
         localStorage.setItem(SIDE_KEY, side);
         // If the guest had the melody playing, the next page carries on with
         // the wedding theme rather than falling silent.
         sessionStorage.setItem("kr-music", audio && audio.isOn() ? "on" : "off");
       } catch {}
+      e.preventDefault();
+      leaveTo(href, side);
     });
   });
 
