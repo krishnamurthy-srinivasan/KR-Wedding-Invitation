@@ -38,10 +38,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" media="print" onload="this.media='all'"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Marcellus&family=Jost:wght@300;400&family=Noto+Serif+Tamil:wght@400;500&display=swap">
-<link rel="preload" as="image" href="photos/chooser.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="photos/chooser-poster.jpg" fetchpriority="high">
 <link rel="stylesheet" href="styles/main.css?v=f5b06295">
-<link rel="stylesheet" href="styles/sections.css?v=c387756f">
-<link rel="stylesheet" href="styles/chooser.css?v=9b23d591">
+<link rel="stylesheet" href="styles/sections.css?v=84d899f5">
+<link rel="stylesheet" href="styles/chooser.css?v=3971fced">
 </head>
 
 <body class="gate">
@@ -99,22 +99,29 @@
 
 <div class="ambient" aria-hidden="true"></div>
 
-<!-- ========== SIDE CHOOSER ========== -->
+<!-- ========== SIDE CHOOSER ==========
+     The animation already carries the two engraved plates, so the links sit
+     directly over them. The video is fixed-framing, so those positions are
+     stable; below 820px the plates are too small to hit, and the picks fall
+     back to their own stacked plates under the film. -->
 <main class="chooser" id="choose" hidden>
-  <div class="chooser__art" aria-hidden="true">
-    <img src="photos/chooser.jpg" width="877" height="1400" fetchpriority="high" decoding="async" alt="">
-  </div>
-  <div class="chooser__veil" aria-hidden="true"></div>
+  <div class="chooser__stage">
+    <video class="chooser__film" autoplay muted loop playsinline
+           poster="photos/chooser-poster.jpg" aria-hidden="true" tabindex="-1">
+      <source src="video/chooser.mp4" type="video/mp4">
+    </video>
+    <img class="chooser__still" src="photos/chooser-poster.jpg" width="772" height="434"
+         alt="" aria-hidden="true">
 
-  <div class="chooser__inner">
-    <header class="chooser__head">
+    <div class="chooser__veil" aria-hidden="true"></div>
+
+    <div class="chooser__hud">
       <p class="chooser__om tamil">ஸ்ரீ:</p>
       <h1 class="chooser__names">Krishnamurthy <span class="script-amp">&amp;</span> Roshini</h1>
       <p class="chooser__date">30 · 10 · 2026</p>
-      <p class="chooser__ask" id="chooser-ask">Whose invitation brings you here?</p>
-    </header>
+    </div>
 
-    <nav class="chooser__picks" aria-labelledby="chooser-ask">
+    <nav class="chooser__picks" aria-label="Choose your side">
       <a class="pick pick--bride" href="bride.html">
         <span class="pick__plate">
           <span class="pick__label">Bride Side</span>
@@ -132,12 +139,13 @@
       </a>
     </nav>
 
-    <p class="chooser__note">Either way, you are our guest. Choose the family who invited you.</p>
+    <p class="chooser__note">Whose invitation brings you here?</p>
   </div>
 </main>
 
 <!-- ========== MUSIC ========== -->
-<audio id="theme-audio" src="audio/theme.mp3" preload="none" loop></audio>
+<!-- The gate plays the carnatic melody; the invitation pages switch to the theme. -->
+<audio id="theme-audio" src="audio/carnatic.mp3" preload="none" loop></audio>
 <button id="music-toggle" class="music" type="button" hidden aria-pressed="false" aria-label="Play music">
   <span class="music__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   <span class="music__off" aria-hidden="true">
@@ -159,6 +167,6 @@
   </span>
 </button>
 
-<script type="module" src="scripts/gate.js?v=15c832cf"></script>
+<script type="module" src="scripts/gate.js?v=966bcdff"></script>
 </body>
 </html>

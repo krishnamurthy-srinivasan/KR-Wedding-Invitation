@@ -80,6 +80,25 @@ export function initAudio({ onReady } = {}) {
 
   btn.addEventListener("click", toggle);
 
+  /* If the guest already opted into music on the gate, carry it over. The
+     browser still counts this page as user-activated from that same gesture,
+     so play() normally succeeds; if it does not, the control simply shows as
+     muted and one tap fixes it. */
+  const resume = async () => {
+    let wanted_ = null;
+    try { wanted_ = sessionStorage.getItem("kr-music"); } catch {}
+    btn.hidden = false;
+    requestAnimationFrame(() => btn.classList.add("is-in"));
+    if (wanted_ !== "on") { paint(); return; }
+    try {
+      await el.play();
+      wanted = true; paint();
+      await fadeTo(TARGET, 2600);
+    } catch {
+      wanted = false; paint();
+    }
+  };
+
   // Duck when the guest leaves the tab; restore only if they had it on.
   document.addEventListener("visibilitychange", async () => {
     if (!wanted) return;
@@ -87,5 +106,5 @@ export function initAudio({ onReady } = {}) {
     else { try { await el.play(); fadeTo(TARGET, 1200); } catch {} }
   });
 
-  return { start, toggle, isOn: () => wanted };
+  return { start, toggle, resume, isOn: () => wanted };
 }

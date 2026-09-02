@@ -7,10 +7,10 @@
 
 :root {
   /* ---- LIGHT: cream paper under a clear sky ---- */
-  --background:        #f2f7fb;   /* pale sky-washed paper */
-  --background-alt:    #e4eef7;
-  --background-deep:   #0d3a63;   /* deep sky blue, the cinematic ground */
-  --background-deeper:  #072542;
+  --background:        #eef4fa;   /* paper under a sea sky */
+  --background-alt:    #dee9f4;
+  --background-deep:   #0a3a6b;   /* royal sea blue, the cinematic ground */
+  --background-deeper: #04203f;
   --paper-warm:        #fbfdff;
   --on-deep:           #f4faff;
 
@@ -19,8 +19,8 @@
   --muted:            #64809b;
   --muted-light:      #9db4c9;
 
-  --accent:            #1665a8;   /* sky blue accent */
-  --accent-deep:       #0e4576;
+  --accent:            #10538f;   /* royal sea blue accent */
+  --accent-deep:       #0a3763;
   --accent-secondary:  #b8446b;   /* the rose of her card's border */
   --peacock:           #12665f;
 
@@ -40,11 +40,11 @@
 
 /* ---- DARK (default): the cream bands become a deep sky blue ---- */
 [data-theme="dark"] {
-  --background:        #0f2f4d;   /* was cream -> deep sky blue */
-  --background-alt:    #143a5e;
-  --background-deep:   #071e33;   /* deeper still for cinematic sections */
-  --background-deeper: #041420;
-  --paper-warm:        #17415f;   /* raised surfaces */
+  --background:        #0c3260;   /* was paper -> royal sea blue */
+  --background-alt:    #114078;
+  --background-deep:   #061f3e;   /* deeper still for cinematic sections */
+  --background-deeper: #03142a;
+  --paper-warm:        #14457a;   /* raised surfaces */
   --on-deep:           #eef7ff;
 
   --foreground:        #e9f4fd;
@@ -52,8 +52,8 @@
   --muted:             #93b2c9;
   --muted-light:       #b6cee0;
 
-  --accent:            #7ec3ee;   /* lifted so it reads on dark */
-  --accent-deep:       #55a6d8;
+  --accent:            #74bdf0;   /* lifted so it reads on dark */
+  --accent-deep:       #4a9fdc;
   --accent-secondary:  #f093b4;
 
   --gold:              #d3b56d;
@@ -72,18 +72,18 @@
 }
 
 /* Ambient layers, retinted for the bride's sky. */
-.aurora--1 { background: radial-gradient(circle, rgba(70, 150, 210, 0.60), transparent 68%); }
+.aurora--1 { background: radial-gradient(circle, rgba(38, 118, 200, 0.66), transparent 68%); }
 .aurora--2 { background: radial-gradient(circle, rgba(206, 172, 92, 0.46), transparent 68%); }
-.aurora--3 { background: radial-gradient(circle, rgba(120, 190, 220, 0.40), transparent 68%); }
+.aurora--3 { background: radial-gradient(circle, rgba(80, 170, 220, 0.44), transparent 68%); }
 
 /* The envelope on the bride's side is sky blue, not purple. */
-.envelope::before { background: linear-gradient(150deg, #14486f, #0e3454 60%, #0a2942); }
-.env__flap        { background: linear-gradient(160deg, #1d5a86, #12405f 70%); }
-.env__flap--l     { background: linear-gradient(90deg,  #1a5279, #123f5d); }
-.env__flap--r     { background: linear-gradient(270deg, #1a5279, #123f5d); }
-.env__flap--b     { background: linear-gradient(0deg,   #0f3550, #17496c); }
+.envelope::before { background: linear-gradient(150deg, #0f4a86, #0a3462 60%, #072849); }
+.env__flap        { background: linear-gradient(160deg, #175d9e, #0e4070 70%); }
+.env__flap--l     { background: linear-gradient(90deg,  #145591, #0e3f6e); }
+.env__flap--r     { background: linear-gradient(270deg, #145591, #0e3f6e); }
+.env__flap--b     { background: linear-gradient(0deg,   #0b3560, #14538f); }
 .overture {
   background: radial-gradient(ellipse 80% 60% at 50% 42%, #13527f 0%,
               var(--background-deep) 45%, var(--background-deeper) 100%);
 }
-[data-theme="dark"] .scratch { background: linear-gradient(165deg, #1a4a6b, #103550); }
+[data-theme="dark"] .scratch { background: linear-gradient(165deg, #16558f, #0c3563); }

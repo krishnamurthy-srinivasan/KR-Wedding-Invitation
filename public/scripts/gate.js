@@ -7,7 +7,7 @@
 
 import { ORN, mountCorners } from "./ornaments.js?v=f828ce9b";
 import { initReveals, prepareDrawings, initAmbient } from "./motion.js?v=f977ae37";
-import { initAudio } from "./audio.js?v=2951ae48";
+import { initAudio } from "./audio.js?v=3e648893";
 import { initTheme } from "./theme.js?v=5dc7a2b3";
 
 const SIDE_KEY = "kr-side";
@@ -39,6 +39,17 @@ function boot() {
     }
   }
 
+  // Hide the poster fallback as soon as the film is actually running.
+  const film = document.querySelector(".chooser__film");
+  const still = document.querySelector(".chooser__still");
+  if (film && still) {
+    const hideStill = () => { still.style.display = "none"; };
+    if (film.readyState >= 2) hideStill();
+    film.addEventListener("playing", hideStill, { once: true });
+    film.addEventListener("loadeddata", hideStill, { once: true });
+    film.addEventListener("error", () => { still.style.display = ""; });
+  }
+
   const overture = document.querySelector(".overture");
   const chooser = document.querySelector(".chooser");
   const seal = document.querySelector("#seal");
@@ -58,11 +69,16 @@ function boot() {
     initReveals();
   };
 
-  // Remember the side the moment it is chosen.
+  // Remember the side, and pass the music baton to the invitation page.
   document.querySelectorAll("[href$='.html']").forEach((a) => {
     a.addEventListener("click", () => {
       const side = a.getAttribute("href").replace(".html", "");
-      try { localStorage.setItem(SIDE_KEY, side); } catch {}
+      try {
+        localStorage.setItem(SIDE_KEY, side);
+        // If the guest had the melody playing, the next page carries on with
+        // the wedding theme rather than falling silent.
+        sessionStorage.setItem("kr-music", audio && audio.isOn() ? "on" : "off");
+      } catch {}
     });
   });
 

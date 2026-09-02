@@ -4,7 +4,7 @@ import { initReveals, prepareDrawings, initParallax, initAmbient } from "./motio
 import { initCountdown } from "./countdown.js?v=1f1955cd";
 import { initLightbox } from "./lightbox.js?v=010ac977";
 import { initNav, initOverture } from "./nav.js?v=b9be22ac";
-import { initAudio } from "./audio.js?v=2951ae48";
+import { initAudio } from "./audio.js?v=3e648893";
 import { initScratch } from "./scratch.js?v=d59d69f4";
 import { initGopuram } from "./gopuram.js?v=3fce13d0";
 import { burst } from "./confetti.js?v=2b8b70a9";
@@ -103,11 +103,9 @@ function boot() {
   buildGallery();
   wireVenue();
 
-  // The gate (index.html) already took the user's gesture, so the control is
-  // available immediately. Nothing plays until they press it.
-  initAudio();
-  const mt = document.querySelector("#music-toggle");
-  if (mt) { mt.hidden = false; requestAnimationFrame(() => mt.classList.add("is-in")); }
+  // The gate already took the user's gesture. If they had music on there,
+  // resume() carries it into this page; otherwise the control just appears.
+  initAudio()?.resume();
   initNav();
 
   prepareDrawings();
